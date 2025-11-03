@@ -1,0 +1,177 @@
+import { useState, useEffect } from "react";
+import { MAJOR_ARCANA, type TarotCard as TarotCardType } from "@shared/cards";
+import Header from "@/components/Header";
+import CardStack from "@/components/CardStack";
+import TarotCard from "@/components/TarotCard";
+import QuestionInput from "@/components/QuestionInput";
+import ResultModal from "@/components/ResultModal";
+import { useToast } from "@/hooks/use-toast";
+
+type GameState = "initial" | "shuffling" | "spread" | "selecting" | "reading";
+
+export default function CatTarotPage() {
+  const [gameState, setGameState] = useState<GameState>("initial");
+  const [question, setQuestion] = useState("");
+  const [shuffledCards, setShuffledCards] = useState<TarotCardType[]>([]);
+  const [selectedCards, setSelectedCards] = useState<TarotCardType[]>([]);
+  const [flippedCardIds, setFlippedCardIds] = useState<number[]>([]);
+  const [reading, setReading] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const { toast } = useToast();
+
+  const shuffleCards = () => {
+    const cards = [...MAJOR_ARCANA];
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    return cards.slice(0, 7);
+  };
+
+  const handleCardStackClick = () => {
+    if (!question) {
+      toast({
+        title: "Please enter your question",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setGameState("shuffling");
+    setTimeout(() => {
+      const shuffled = shuffleCards();
+      setShuffledCards(shuffled);
+      setGameState("spread");
+      setTimeout(() => {
+        setGameState("selecting");
+      }, 500);
+    }, 1500);
+  };
+
+  const handleCardClick = (card: TarotCardType) => {
+    if (gameState !== "selecting") return;
+    if (selectedCards.find(c => c.id === card.id)) return;
+    if (selectedCards.length >= 3) return;
+
+    setFlippedCardIds(prev => [...prev, card.id]);
+    
+    setTimeout(() => {
+      const newSelected = [...selectedCards, card];
+      setSelectedCards(newSelected);
+
+      if (newSelected.length === 3) {
+        setGameState("reading");
+        generateReading(newSelected);
+      }
+    }, 300);
+  };
+
+  const generateReading = (cards: TarotCardType[]) => {
+    const cardKeywords = cards.map(c => c.keywords.join(", ")).join("; ");
+    const mockReading = `Butler, your scattered treats reveal much. The paths ahead shimmer with possibility, though some may lead to empty food bowls. Trust your instincts as I trust mine when hunting the red dot. The cosmic yarn ball spins in your favor, but remember—sometimes the box chooses the cat, not the other way around. Patience brings rewards, just as sitting by the door eventually opens it.`;
+    
+    setReading(mockReading);
+    setTimeout(() => {
+      setShowModal(true);
+    }, 800);
+  };
+
+  const handleReset = () => {
+    setGameState("initial");
+    setQuestion("");
+    setShuffledCards([]);
+    setSelectedCards([]);
+    setFlippedCardIds([]);
+    setReading("");
+    setShowModal(false);
+  };
+
+  const getCardPosition = (index: number, total: number) => {
+    if (gameState === "initial" || gameState === "shuffling") {
+      return { x: 0, y: 0, rotation: 0 };
+    }
+
+    const centerIndex = Math.floor(total / 2);
+    const offset = index - centerIndex;
+    const spacing = 80;
+    const maxRotation = 20;
+    
+    const rotation = (offset / centerIndex) * maxRotation;
+    const x = offset * spacing;
+    const y = Math.abs(offset) * 10;
+
+    return { x, y, rotation };
+  };
+
+  return (
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <Header onHomeClick={handleReset} />
+
+      <div className="pt-16 h-screen flex flex-col">
+        <div className="flex-1 relative">
+          {gameState === "initial" && (
+            <div
+              className="absolute transition-all duration-1000 ease-out"
+              style={{
+                bottom: "140px",
+                left: "2rem",
+              }}
+            >
+              <CardStack onClick={handleCardStackClick} />
+            </div>
+          )}
+
+          {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
+              style={{
+                width: "600px",
+                height: "200px",
+              }}
+            >
+              <div className="relative w-full h-full flex items-center justify-center">
+                {shuffledCards.map((card, index) => {
+                  const pos = getCardPosition(index, shuffledCards.length);
+                  const isSelected = selectedCards.find(c => c.id === card.id);
+                  const isFlipped = flippedCardIds.includes(card.id);
+
+                  return (
+                    <div
+                      key={card.id}
+                      className="absolute transition-all duration-700 ease-out"
+                      style={{
+                        transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
+                        opacity: isSelected ? 0.6 : 1,
+                        zIndex: isSelected ? 10 : 1,
+                      }}
+                    >
+                      <TarotCard
+                        card={card}
+                        isFlipped={isFlipped}
+                        onClick={() => handleCardClick(card)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="p-4 pb-6">
+          <QuestionInput
+            onSubmit={setQuestion}
+            disabled={gameState !== "initial"}
+          />
+        </div>
+      </div>
+
+      <ResultModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        selectedCards={selectedCards}
+        reading={reading}
+      />
+    </div>
+  );
+}
