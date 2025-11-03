@@ -26,6 +26,7 @@ export default function CatTarotPage() {
   const [shuffledCards, setShuffledCards] = useState<TarotCardType[]>([]);
   const [selectedCards, setSelectedCards] = useState<TarotCardType[]>([]);
   const [flippedCardIds, setFlippedCardIds] = useState<number[]>([]);
+  const [zoomedCardId, setZoomedCardId] = useState<number | null>(null);
   const [reading, setReading] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
@@ -86,15 +87,20 @@ export default function CatTarotPage() {
     if (selectedCards.length >= 3) return;
 
     setFlippedCardIds(prev => [...prev, card.id]);
+    setZoomedCardId(card.id);
     
     setTimeout(() => {
       const newSelected = [...selectedCards, card];
       setSelectedCards(newSelected);
 
-      if (newSelected.length === 3) {
-        setGameState("reading");
-        generateReading(newSelected);
-      }
+      setTimeout(() => {
+        setZoomedCardId(null);
+        
+        if (newSelected.length === 3) {
+          setGameState("reading");
+          generateReading(newSelected);
+        }
+      }, 1500);
     }, 300);
   };
 
@@ -111,6 +117,7 @@ export default function CatTarotPage() {
     setShuffledCards([]);
     setSelectedCards([]);
     setFlippedCardIds([]);
+    setZoomedCardId(null);
     setReading("");
     setShowModal(false);
     readingMutation.reset();
@@ -165,15 +172,19 @@ export default function CatTarotPage() {
                   const pos = getCardPosition(index, shuffledCards.length);
                   const isSelected = selectedCards.find(c => c.id === card.id);
                   const isFlipped = flippedCardIds.includes(card.id);
+                  const isZoomed = zoomedCardId === card.id;
 
                   return (
                     <div
                       key={card.id}
                       className="absolute transition-all duration-700 ease-out"
                       style={{
-                        transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
-                        opacity: isSelected ? 0.6 : 1,
-                        zIndex: isSelected ? 10 : 1,
+                        transform: isZoomed 
+                          ? 'translate(-50%, -280px) rotate(0deg) scale(2.5)'
+                          : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
+                        opacity: isSelected && !isZoomed ? 0.6 : 1,
+                        zIndex: isZoomed ? 100 : (isSelected ? 10 : 1),
+                        left: isZoomed ? '50%' : 'auto',
                       }}
                       data-testid={`spread-card-${index}`}
                     >
