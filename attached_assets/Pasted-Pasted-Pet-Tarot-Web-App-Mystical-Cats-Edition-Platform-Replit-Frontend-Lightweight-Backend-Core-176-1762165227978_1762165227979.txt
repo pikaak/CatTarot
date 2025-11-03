@@ -1,0 +1,114 @@
+Pasted-Pet-Tarot-Web-App-Mystical-Cats-Edition-Platform-Replit-Frontend-Lightweight-Backend-Core-1762159563779_1762159563779.txt
+Pet Tarot Web App (Mystical Cats Edition)
+
+Platform: Replit (Frontend + Lightweight Backend)
+Core Stack: HTML/CSS/JS (or React), Node.js / Express
+Purpose: Interactive tarot reading experience themed around Mystical Cats, where an AI cat gives tarot readings from a feline’s point of view.
+
+1. Core Concept
+Overview
+
+This app is a pet-themed tarot reading service using gemini free model, centered on Mystical Cats Tarot.
+The experience is designed to feel like the user’s own cat is reading their fortune.
+
+Key Features
+
+Users ask a question about their cat.
+
+The chatbot responds as the cat, referring to the user as “butler.”
+
+Tone: friendly, brief (max 3 sentences per response).
+
+The chatbot must not use “meow,” “nyang,” or emojis.
+
+The chatbot must not say the title of cards.
+
+Tarot card front and back illustrations are randomly generated.
+
+All card backs are identical.
+
+All illustrations can be manually replaced later (asset extensibility).
+
+Initially supports Major Arcana only, but structure allows adding Minor Arcana.
+
+2. User Flow
+2.1 Home Screen
+Element	Description
+Header	Displays “Cat Tarot” at the top center.
+Left-top	‘Home’ button.
+Bottom-left	Stack of face-down tarot cards.
+the most Bottom       Question input field.
+The area above is a placeholder for future banner ads (reserved height).
+
+2.2 Question Input & Shuffle
+
+When a question is entered and the user clicks the card stack,
+the stack moves toward the right-center of the screen.
+
+A shuffle animation plays.
+
+If the card stack is clicked before entering a question,
+→ No animation; show message: “Please enter your question.”
+
+2.3 Card Spread
+
+After shuffling, cards spread out automatically on the right side with animation.
+(Use translate/rotate or staggered transitions.)
+
+2.4 Card Selection
+
+The user selects cards one by one among the spreaded cards.
+
+Each selected card flips (3D transform) to reveal its face.
+
+After selecting three cards, the cat chatbot is automatically triggered.
+
+2.5 Result Popup
+
+A result window (popup modal) appears.
+
+The cat chatbot interprets the three chosen cards and delivers a short reading.
+
+2.6 Chatbot Response Behavior
+Aspect	Specification
+Response length	Max 3 sentences.
+Tone	Friendly, reflective.
+Prohibited	No “meow/nyang” words, no emojis.
+Display logic	Text stays inside popup boundaries. If overflow → show arrow (>).
+Pagination	Clicking the arrow smoothly scrolls to the next part of the text.
+2.7 Return to Home
+
+After reading all chatbot responses,
+clicking the ‘Home’ button (top-left) resets the app:
+
+All cards return to face-down stacked state.
+
+The question field clears.
+
+3. System Design Notes
+Area	Implementation Detail
+Frontend	HTML/CSS/JS or React (for animation and state).
+Animations	CSS keyframes or GSAP/Web Animations API.
+State Management	Simple JS store or React state.
+Backend (optional)	Node.js/Express API endpoint for LLM calls.
+LLM Integration	Use external free API (gemini).
+Image Assets	Store in /assets/cards/; JSON map links each card name → image path.
+Extensibility	Card data (names, meanings) stored in cards.json. Easy to add Minor Arcana later.
+Localization	Korean / English switching possible (optional).
+4. Example LLM Prompt
+You are a cat speaking to your butler.
+Respond in a friendly and reflective tone.
+Your answer must be within 3 sentences.
+Do not use “meow,” “nyang,” or emoticons.
+Interpret the following three tarot cards from the cat’s perspective:
+{card1}, {card2}, {card3}.
+
+5. Technical Constraints & Notes
+
+Replit does not include built-in AI models; use external free APIs.
+
+Reserve space at the abobe of the input box for future ad banners.
+
+All illustrations must be user-replaceable.
+
+Optimize for mobile screen widths (touch selection & smooth animations).
