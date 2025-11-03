@@ -171,8 +171,11 @@ export default function CatTarotPage() {
                       key={card.id}
                       className="absolute transition-all duration-700 ease-out"
                       style={{
-                        transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
-                        opacity: isSelected ? 0.6 : 1,
+                        transform: isSelected 
+                          ? 'translate(-50%, -200px) scale(1.8)' 
+                          : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg)`,
+                        left: isSelected ? '50%' : '0',
+                        opacity: 1,
                         zIndex: isSelected ? 10 : 1,
                       }}
                       data-testid={`spread-card-${index}`}
