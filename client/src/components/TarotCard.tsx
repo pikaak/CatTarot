@@ -52,7 +52,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
 
   return (
     <div
-      className={`relative cursor-pointer transition-transform duration-200 ${className}`}
+      className={`relative w-24 h-36 md:w-32 md:h-48 cursor-pointer transition-transform duration-200 ${className}`}
       style={{
         perspective: "1000px",
         ...style,
@@ -76,8 +76,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
           <img
             src={cardBackImg}
             alt="Card back"
-            className="rounded-md"
-            style={{ width: "96px", height: "auto" }}
+            className="w-full h-full object-cover rounded-md"
           />
         </div>
         <div
@@ -90,8 +89,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
           <img
             src={cardFrontImage}
             alt={card.name}
-            className="rounded-md"
-            style={{ width: "96px", height: "auto" }}
+            className="w-full h-full object-cover rounded-md"
           />
         </div>
       </div>
