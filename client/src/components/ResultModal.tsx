@@ -32,12 +32,28 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
   };
 
   const cardImages: Record<string, string> = {
-    "@assets/generated_images/The_Fool_tarot_card_d44cad26.png": new URL("@assets/generated_images/The_Fool_tarot_card_d44cad26.png", import.meta.url).href,
-    "@assets/generated_images/The_Magician_tarot_card_15bdbf18.png": new URL("@assets/generated_images/The_Magician_tarot_card_15bdbf18.png", import.meta.url).href,
-    "@assets/generated_images/High_Priestess_tarot_card_b1606ff1.png": new URL("@assets/generated_images/High_Priestess_tarot_card_b1606ff1.png", import.meta.url).href,
-    "@assets/generated_images/The_Lovers_tarot_card_01d9fd4d.png": new URL("@assets/generated_images/The_Lovers_tarot_card_01d9fd4d.png", import.meta.url).href,
-    "@assets/generated_images/The_Sun_tarot_card_8e006017.png": new URL("@assets/generated_images/The_Sun_tarot_card_8e006017.png", import.meta.url).href,
-    "@assets/generated_images/The_Moon_tarot_card_22b91408.png": new URL("@assets/generated_images/The_Moon_tarot_card_22b91408.png", import.meta.url).href,
+    "@assets/generated_images/The_Cat_tarot_card_5842b39d.png": new URL("@assets/generated_images/The_Cat_tarot_card_5842b39d.png", import.meta.url).href,
+    "@assets/generated_images/Magic_Cat_tarot_card_60c4812d.png": new URL("@assets/generated_images/Magic_Cat_tarot_card_60c4812d.png", import.meta.url).href,
+    "@assets/generated_images/The_Priestess_tarot_card_e61e48df.png": new URL("@assets/generated_images/The_Priestess_tarot_card_e61e48df.png", import.meta.url).href,
+    "@assets/generated_images/The_Empress_tarot_card_ee0ea80d.png": new URL("@assets/generated_images/The_Empress_tarot_card_ee0ea80d.png", import.meta.url).href,
+    "@assets/generated_images/The_Emperor_tarot_card_bdbc0457.png": new URL("@assets/generated_images/The_Emperor_tarot_card_bdbc0457.png", import.meta.url).href,
+    "@assets/generated_images/The_Priest_tarot_card_ef6dc44c.png": new URL("@assets/generated_images/The_Priest_tarot_card_ef6dc44c.png", import.meta.url).href,
+    "@assets/generated_images/The_Lovers_tarot_card_c3392b58.png": new URL("@assets/generated_images/The_Lovers_tarot_card_c3392b58.png", import.meta.url).href,
+    "@assets/generated_images/The_Chariot_tarot_card_0f645f51.png": new URL("@assets/generated_images/The_Chariot_tarot_card_0f645f51.png", import.meta.url).href,
+    "@assets/generated_images/Strength_tarot_card_87e145f8.png": new URL("@assets/generated_images/Strength_tarot_card_87e145f8.png", import.meta.url).href,
+    "@assets/generated_images/The_Hermit_tarot_card_608f439f.png": new URL("@assets/generated_images/The_Hermit_tarot_card_608f439f.png", import.meta.url).href,
+    "@assets/generated_images/The_Wheel_tarot_card_87c2c04d.png": new URL("@assets/generated_images/The_Wheel_tarot_card_87c2c04d.png", import.meta.url).href,
+    "@assets/generated_images/Consequences_tarot_card_ad5b6fd0.png": new URL("@assets/generated_images/Consequences_tarot_card_ad5b6fd0.png", import.meta.url).href,
+    "@assets/generated_images/The_Floating_Cat_tarot_card_d01b3c1c.png": new URL("@assets/generated_images/The_Floating_Cat_tarot_card_d01b3c1c.png", import.meta.url).href,
+    "@assets/generated_images/Death_tarot_card_6e9e947c.png": new URL("@assets/generated_images/Death_tarot_card_6e9e947c.png", import.meta.url).href,
+    "@assets/generated_images/Grace_tarot_card_eb5c0185.png": new URL("@assets/generated_images/Grace_tarot_card_eb5c0185.png", import.meta.url).href,
+    "@assets/generated_images/Demon_Cat_tarot_card_7fe700fb.png": new URL("@assets/generated_images/Demon_Cat_tarot_card_7fe700fb.png", import.meta.url).href,
+    "@assets/generated_images/The_Tower_tarot_card_26cca850.png": new URL("@assets/generated_images/The_Tower_tarot_card_26cca850.png", import.meta.url).href,
+    "@assets/generated_images/Stars_tarot_card_085a27c1.png": new URL("@assets/generated_images/Stars_tarot_card_085a27c1.png", import.meta.url).href,
+    "@assets/generated_images/Moon_tarot_card_4ae90128.png": new URL("@assets/generated_images/Moon_tarot_card_4ae90128.png", import.meta.url).href,
+    "@assets/generated_images/Sun_tarot_card_d9767513.png": new URL("@assets/generated_images/Sun_tarot_card_d9767513.png", import.meta.url).href,
+    "@assets/generated_images/Good_Kitty_tarot_card_c61e7c0e.png": new URL("@assets/generated_images/Good_Kitty_tarot_card_c61e7c0e.png", import.meta.url).href,
+    "@assets/generated_images/The_World_tarot_card_9a1f7cf7.png": new URL("@assets/generated_images/The_World_tarot_card_9a1f7cf7.png", import.meta.url).href,
   };
 
   return (
