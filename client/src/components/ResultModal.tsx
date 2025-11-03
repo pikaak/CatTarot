@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, X } from "lucide-react";
 import { useState } from "react";
 import type { TarotCard } from "@shared/cards";
-import catAvatarImg from "@assets/generated_images/Fortune_teller_cat_avatar_49899323.png";
+import catAvatarImg from "@assets/generated_images/Fortune_teller_cat_avatar.png";
 
 interface ResultModalProps {
   isOpen: boolean;
@@ -93,7 +93,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         </div>
 
         <div className="relative min-h-[120px]">
-          <p className="text-base md:text-lg leading-relaxed text-foreground">
+          <p className="text-base md:text-lg leading-relaxed text-foreground font-medium opacity-100">
             {currentText}
           </p>
         </div>
