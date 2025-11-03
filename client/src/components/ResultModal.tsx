@@ -31,6 +31,12 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
     onClose();
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      handleClose();
+    }
+  };
+
   const cardImages: Record<string, string> = {
     "@assets/generated_images/The_Cat_tarot_card_5842b39d.png": new URL("@assets/generated_images/The_Cat_tarot_card_5842b39d.png", import.meta.url).href,
     "@assets/generated_images/Magic_Cat_tarot_card_60c4812d.png": new URL("@assets/generated_images/Magic_Cat_tarot_card_60c4812d.png", import.meta.url).href,
@@ -57,18 +63,8 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md md:max-w-lg rounded-2xl p-8 md:p-12" data-testid="modal-result">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-4 right-4 h-10 w-10"
-          onClick={handleClose}
-          data-testid="button-close-modal"
-        >
-          <X className="h-5 w-5" />
-        </Button>
-        
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-md md:max-w-lg rounded-2xl p-8 md:p-12" data-testid="modal-result" hideClose>
         <DialogHeader>
           <DialogTitle className="sr-only">Your Cat's Reading</DialogTitle>
         </DialogHeader>

@@ -166,13 +166,25 @@ export default function CatTarotPage() {
                   const isSelected = selectedCards.find(c => c.id === card.id);
                   const isFlipped = flippedCardIds.includes(card.id);
 
+                  const selectedIndex = selectedCards.findIndex(c => c.id === card.id);
+                  const getSelectedPosition = () => {
+                    if (selectedIndex === -1) return null;
+                    const positions = [
+                      { x: '-50%', offsetX: '-120px' }, // Left
+                      { x: '-50%', offsetX: '0px' },     // Center
+                      { x: '-50%', offsetX: '120px' }    // Right
+                    ];
+                    return positions[selectedIndex];
+                  };
+                  const selectedPos = getSelectedPosition();
+
                   return (
                     <div
                       key={card.id}
                       className="absolute transition-all duration-700 ease-out"
                       style={{
                         transform: isSelected 
-                          ? 'translate(-50%, -200px) scale(1.8)' 
+                          ? `translate(calc(${selectedPos?.x} + ${selectedPos?.offsetX}), -200px) scale(1.8)` 
                           : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg)`,
                         left: isSelected ? '50%' : '0',
                         opacity: 1,
@@ -213,7 +225,7 @@ export default function CatTarotPage() {
 
       <ResultModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={handleReset}
         selectedCards={selectedCards}
         reading={reading}
       />
