@@ -78,7 +78,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
           <img
             src={cardBackImg}
             alt="Card back"
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-contain rounded-md"
           />
         </div>
         <div
@@ -91,7 +91,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
           <img
             src={cardFrontImage}
             alt={card.name}
-            className="w-full h-full object-cover rounded-md"
+            className="w-full h-full object-contain rounded-md"
           />
         </div>
       </div>
