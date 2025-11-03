@@ -18,6 +18,23 @@ const cardImages: Record<string, string> = {
   "@assets/generated_images/The_Lovers_tarot_card_01d9fd4d.png": new URL("@assets/generated_images/The_Lovers_tarot_card_01d9fd4d.png", import.meta.url).href,
   "@assets/generated_images/The_Sun_tarot_card_8e006017.png": new URL("@assets/generated_images/The_Sun_tarot_card_8e006017.png", import.meta.url).href,
   "@assets/generated_images/The_Moon_tarot_card_22b91408.png": new URL("@assets/generated_images/The_Moon_tarot_card_22b91408.png", import.meta.url).href,
+  // Placeholder paths for missing cards - images need to be created
+  "@assets/generated_images/The_Empress_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Emperor_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Hierophant_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Chariot_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Strength_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Hermit_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Wheel_of_Fortune_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Justice_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Hanged_Man_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Death_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Temperance_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Devil_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Tower_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_Star_tarot_card.png": cardBackImg,
+  "@assets/generated_images/Judgement_tarot_card.png": cardBackImg,
+  "@assets/generated_images/The_World_tarot_card.png": cardBackImg,
 };
 
 export default function TarotCard({ card, isFlipped, onClick, className = "", style }: TarotCardProps) {
