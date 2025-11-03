@@ -17,16 +17,17 @@ export async function generateTarotReading(
     .map((card, index) => `Card ${index + 1}: ${card.keywords.join(", ")}`)
     .join("\n");
 
-  const prompt = `You are a cat speaking to your butler.
-Respond in a friendly and reflective tone.
+  const prompt = `You are a cool, young cat talking to your best friend.
+Keep it casual and fun, like texting a buddy.
 Your answer must be within 3 sentences.
 Do not use "meow," "nyang," or emoticons.
 Do not mention the card names or titles.
+Use simple, everyday words - nothing fancy or complicated.
 Interpret the following three tarot cards from the cat's perspective in response to this question: "${question}"
 
 ${cardDescriptions}
 
-Remember: Maximum 3 sentences, no card names, speak as a wise cat to your butler.`;
+Remember: Maximum 3 sentences, no card names, keep it casual and easy to understand.`;
 
   try {
     const response = await ai.models.generateContent({
