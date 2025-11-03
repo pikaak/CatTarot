@@ -61,7 +61,7 @@ export default function CatTarotPage() {
     return cards;
   };
 
-  const handleCardStackClick = () => {
+  const handleShuffle = () => {
     if (!question) {
       toast({
         title: "Please enter your question",
@@ -146,18 +146,6 @@ export default function CatTarotPage() {
 
       <div className="pt-16 h-screen flex flex-col">
         <div className="flex-1 relative">
-          {gameState === "initial" && (
-            <div
-              className="absolute transition-all duration-1000 ease-out"
-              style={{
-                bottom: "140px",
-                left: "2rem",
-              }}
-            >
-              <CardStack onClick={handleCardStackClick} />
-            </div>
-          )}
-
           {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
@@ -214,6 +202,7 @@ export default function CatTarotPage() {
             value={question}
             onChange={setQuestion}
             disabled={gameState !== "initial"}
+            onSubmit={handleShuffle}
           />
         </div>
       </div>

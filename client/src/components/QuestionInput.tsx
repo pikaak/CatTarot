@@ -6,11 +6,18 @@ interface QuestionInputProps {
   value: string;
   onChange: (question: string) => void;
   disabled?: boolean;
+  onSubmit?: () => void;
 }
 
-export default function QuestionInput({ value, onChange, disabled = false }: QuestionInputProps) {
+export default function QuestionInput({ value, onChange, disabled = false, onSubmit }: QuestionInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (onSubmit && value && value.trim()) {
+      onSubmit();
+    }
   };
 
   return (
@@ -31,7 +38,8 @@ export default function QuestionInput({ value, onChange, disabled = false }: Que
         <Button
           size="icon"
           disabled={disabled || !value || !value.trim()}
-          className="h-12 w-12 rounded-full opacity-50 cursor-default"
+          onClick={handleSubmit}
+          className="h-12 w-12 rounded-full"
           data-testid="button-submit"
         >
           <ArrowRight className="h-5 w-5" />
