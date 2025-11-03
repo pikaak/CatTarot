@@ -1,26 +1,16 @@
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 interface QuestionInputProps {
-  onSubmit: (question: string) => void;
+  value: string;
+  onChange: (question: string) => void;
   disabled?: boolean;
 }
 
-export default function QuestionInput({ onSubmit, disabled = false }: QuestionInputProps) {
-  const [question, setQuestion] = useState("");
-
-  const handleSubmit = () => {
-    if (question.trim()) {
-      onSubmit(question.trim());
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && question.trim()) {
-      handleSubmit();
-    }
+export default function QuestionInput({ value, onChange, disabled = false }: QuestionInputProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
   };
 
   return (
@@ -32,18 +22,16 @@ export default function QuestionInput({ onSubmit, disabled = false }: QuestionIn
         <Input
           type="text"
           placeholder="Enter your question..."
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyPress={handleKeyPress}
+          value={value}
+          onChange={handleChange}
           disabled={disabled}
           className="flex-1 h-12 rounded-full px-6"
           data-testid="input-question"
         />
         <Button
           size="icon"
-          onClick={handleSubmit}
-          disabled={disabled || !question.trim()}
-          className="h-12 w-12 rounded-full"
+          disabled={disabled || !value || !value.trim()}
+          className="h-12 w-12 rounded-full opacity-50 cursor-default"
           data-testid="button-submit"
         >
           <ArrowRight className="h-5 w-5" />

@@ -1,13 +1,18 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI(process.env.AI_INTEGRATIONS_GEMINI_API_KEY || "");
+// Using Replit's AI Integrations service for Gemini access
+const ai = new GoogleGenAI({
+  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY || "",
+  httpOptions: {
+    apiVersion: "",
+    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL || "",
+  },
+});
 
 export async function generateTarotReading(
   question: string,
   cards: { name: string; keywords: string[] }[]
 ): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
-
   const cardDescriptions = cards
     .map((card, index) => `Card ${index + 1}: ${card.keywords.join(", ")}`)
     .join("\n");
@@ -24,11 +29,12 @@ ${cardDescriptions}
 Remember: Maximum 3 sentences, no card names, speak as a wise cat to your butler.`;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
     
-    return text.trim();
+    return response.text || "Your cat is mysteriously silent at the moment.";
   } catch (error) {
     console.error("Error generating tarot reading:", error);
     throw new Error("Failed to generate reading");

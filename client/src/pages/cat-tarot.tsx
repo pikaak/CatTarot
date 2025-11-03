@@ -113,6 +113,7 @@ export default function CatTarotPage() {
     setFlippedCardIds([]);
     setReading("");
     setShowModal(false);
+    readingMutation.reset();
   };
 
   const getCardPosition = (index: number, total: number) => {
@@ -157,6 +158,7 @@ export default function CatTarotPage() {
                 width: "600px",
                 height: "200px",
               }}
+              data-testid="card-spread-container"
             >
               <div className="relative w-full h-full flex items-center justify-center">
                 {shuffledCards.map((card, index) => {
@@ -173,6 +175,7 @@ export default function CatTarotPage() {
                         opacity: isSelected ? 0.6 : 1,
                         zIndex: isSelected ? 10 : 1,
                       }}
+                      data-testid={`spread-card-${index}`}
                     >
                       <TarotCard
                         card={card}
@@ -197,7 +200,8 @@ export default function CatTarotPage() {
 
         <div className="p-4 pb-6">
           <QuestionInput
-            onSubmit={setQuestion}
+            value={question}
+            onChange={setQuestion}
             disabled={gameState !== "initial"}
           />
         </div>
