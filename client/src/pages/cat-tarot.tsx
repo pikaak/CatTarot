@@ -26,7 +26,6 @@ export default function CatTarotPage() {
   const [shuffledCards, setShuffledCards] = useState<TarotCardType[]>([]);
   const [selectedCards, setSelectedCards] = useState<TarotCardType[]>([]);
   const [flippedCardIds, setFlippedCardIds] = useState<number[]>([]);
-  const [zoomedCardId, setZoomedCardId] = useState<number | null>(null);
   const [reading, setReading] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
@@ -61,7 +60,7 @@ export default function CatTarotPage() {
     return cards;
   };
 
-  const handleShuffle = () => {
+  const handleCardStackClick = () => {
     if (!question) {
       toast({
         title: "Please enter your question",
@@ -87,20 +86,15 @@ export default function CatTarotPage() {
     if (selectedCards.length >= 3) return;
 
     setFlippedCardIds(prev => [...prev, card.id]);
-    setZoomedCardId(card.id);
     
     setTimeout(() => {
       const newSelected = [...selectedCards, card];
       setSelectedCards(newSelected);
 
-      setTimeout(() => {
-        setZoomedCardId(null);
-        
-        if (newSelected.length === 3) {
-          setGameState("reading");
-          generateReading(newSelected);
-        }
-      }, 1500);
+      if (newSelected.length === 3) {
+        setGameState("reading");
+        generateReading(newSelected);
+      }
     }, 300);
   };
 
@@ -117,7 +111,6 @@ export default function CatTarotPage() {
     setShuffledCards([]);
     setSelectedCards([]);
     setFlippedCardIds([]);
-    setZoomedCardId(null);
     setReading("");
     setShowModal(false);
     readingMutation.reset();
@@ -146,21 +139,19 @@ export default function CatTarotPage() {
 
       <div className="pt-16 h-screen flex flex-col">
         <div className="flex-1 relative">
-          {(gameState === "initial" || gameState === "shuffling") && (
+          {gameState === "initial" && (
             <div
               className="absolute transition-all duration-1000 ease-out"
               style={{
-                bottom: gameState === "shuffling" ? "50%" : "140px",
-                left: gameState === "shuffling" ? "50%" : "2rem",
-                transform: gameState === "shuffling" ? "translate(-50%, 50%)" : "none",
-                opacity: gameState === "shuffling" ? 0 : 1,
+                bottom: "140px",
+                left: "2rem",
               }}
             >
-              <CardStack onClick={() => {}} isAnimating={gameState === "shuffling"} />
+              <CardStack onClick={handleCardStackClick} />
             </div>
           )}
 
-          {(gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
+          {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
               style={{
@@ -174,19 +165,15 @@ export default function CatTarotPage() {
                   const pos = getCardPosition(index, shuffledCards.length);
                   const isSelected = selectedCards.find(c => c.id === card.id);
                   const isFlipped = flippedCardIds.includes(card.id);
-                  const isZoomed = zoomedCardId === card.id;
 
                   return (
                     <div
                       key={card.id}
                       className="absolute transition-all duration-700 ease-out"
                       style={{
-                        transform: isZoomed 
-                          ? 'translate(-50%, -280px) rotate(0deg) scale(2.5)'
-                          : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
-                        opacity: isSelected && !isZoomed ? 0.6 : 1,
-                        zIndex: isZoomed ? 100 : (isSelected ? 10 : 1),
-                        left: isZoomed ? '50%' : 'auto',
+                        transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
+                        opacity: isSelected ? 0.6 : 1,
+                        zIndex: isSelected ? 10 : 1,
                       }}
                       data-testid={`spread-card-${index}`}
                     >
@@ -216,7 +203,6 @@ export default function CatTarotPage() {
             value={question}
             onChange={setQuestion}
             disabled={gameState !== "initial"}
-            onSubmit={handleShuffle}
           />
         </div>
       </div>

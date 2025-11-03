@@ -93,7 +93,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-sm text-muted-foreground">Your Cat's Thoughts</div>
+          <div className="text-sm text-muted-foreground">Your Cat's Wisdom</div>
         </div>
 
         <div className="relative min-h-[120px]">

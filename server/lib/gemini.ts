@@ -18,7 +18,7 @@ export async function generateTarotReading(
     .join("\n");
 
   const prompt = `You are a cat speaking to your butler.
-Respond in a playful, energetic, and youthful tone - like an enthusiastic young cat.
+Respond in a friendly and reflective tone.
 Your answer must be within 3 sentences.
 Do not use "meow," "nyang," or emoticons.
 Do not mention the card names or titles.
@@ -26,7 +26,7 @@ Interpret the following three tarot cards from the cat's perspective in response
 
 ${cardDescriptions}
 
-Remember: Maximum 3 sentences, no card names, speak as a young and spirited cat to your butler.`;
+Remember: Maximum 3 sentences, no card names, speak as a wise cat to your butler.`;
 
   try {
     const response = await ai.models.generateContent({
