@@ -1,18 +1,19 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const tarotReadingRequestSchema = z.object({
+  question: z.string().min(1, "Question is required"),
+  cards: z.array(
+    z.object({
+      name: z.string(),
+      keywords: z.array(z.string()),
+    })
+  ).length(3, "Exactly 3 cards must be selected"),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export type TarotReadingRequest = z.infer<typeof tarotReadingRequestSchema>;
+
+export const tarotReadingResponseSchema = z.object({
+  reading: z.string(),
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type TarotReadingResponse = z.infer<typeof tarotReadingResponseSchema>;

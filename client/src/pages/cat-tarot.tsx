@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MAJOR_ARCANA, type TarotCard as TarotCardType } from "@shared/cards";
 import Header from "@/components/Header";
 import CardStack from "@/components/CardStack";
@@ -6,8 +6,19 @@ import TarotCard from "@/components/TarotCard";
 import QuestionInput from "@/components/QuestionInput";
 import ResultModal from "@/components/ResultModal";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 type GameState = "initial" | "shuffling" | "spread" | "selecting" | "reading";
+
+interface TarotReadingRequest {
+  question: string;
+  cards: { name: string; keywords: string[] }[];
+}
+
+interface TarotReadingResponse {
+  reading: string;
+}
 
 export default function CatTarotPage() {
   const [gameState, setGameState] = useState<GameState>("initial");
@@ -18,6 +29,27 @@ export default function CatTarotPage() {
   const [reading, setReading] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { toast } = useToast();
+
+  const readingMutation = useMutation<TarotReadingResponse, Error, TarotReadingRequest>({
+    mutationFn: async (data) => {
+      const res = await apiRequest("POST", "/api/tarot/reading", data);
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      setReading(data.reading);
+      setTimeout(() => {
+        setShowModal(true);
+      }, 800);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to generate reading. Please try again.",
+        variant: "destructive",
+      });
+      setGameState("selecting");
+    },
+  });
 
   const shuffleCards = () => {
     const cards = [...MAJOR_ARCANA];
@@ -67,13 +99,10 @@ export default function CatTarotPage() {
   };
 
   const generateReading = (cards: TarotCardType[]) => {
-    const cardKeywords = cards.map(c => c.keywords.join(", ")).join("; ");
-    const mockReading = `Butler, your scattered treats reveal much. The paths ahead shimmer with possibility, though some may lead to empty food bowls. Trust your instincts as I trust mine when hunting the red dot. The cosmic yarn ball spins in your favor, but remember—sometimes the box chooses the cat, not the other way around. Patience brings rewards, just as sitting by the door eventually opens it.`;
-    
-    setReading(mockReading);
-    setTimeout(() => {
-      setShowModal(true);
-    }, 800);
+    readingMutation.mutate({
+      question,
+      cards: cards.map(c => ({ name: c.name, keywords: c.keywords })),
+    });
   };
 
   const handleReset = () => {
@@ -153,6 +182,14 @@ export default function CatTarotPage() {
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {readingMutation.isPending && (
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+              <div className="text-lg font-serif text-foreground animate-pulse">
+                Your cat is consulting the cosmic forces...
               </div>
             </div>
           )}
