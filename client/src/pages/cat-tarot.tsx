@@ -155,8 +155,9 @@ export default function CatTarotPage() {
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg"
               style={{
-                width: "700px",
-                height: "400px",
+                width: "90vw",
+                maxWidth: "1200px",
+                height: "calc(100vh - 180px)",
                 background: `
                   repeating-linear-gradient(
                     90deg,
