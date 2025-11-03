@@ -205,6 +205,14 @@ export default function CatTarotPage() {
             </div>
           )}
 
+          {gameState === "selecting" && selectedCards.length < 3 && (
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-32 text-center">
+              <div className="text-lg font-serif text-foreground bg-card/90 backdrop-blur-sm px-6 py-3 rounded-lg shadow-lg border border-border">
+                Select {3 - selectedCards.length} card{3 - selectedCards.length !== 1 ? 's' : ''} to reveal your fortune
+              </div>
+            </div>
+          )}
+
           {readingMutation.isPending && (
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
               <div className="text-lg font-serif text-foreground animate-pulse">
