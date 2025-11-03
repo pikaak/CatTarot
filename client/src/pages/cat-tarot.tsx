@@ -121,15 +121,14 @@ export default function CatTarotPage() {
       return { x: 0, y: 0, rotation: 0 };
     }
 
-    // Center the spread by using the middle card as reference
-    const centerIndex = (total - 1) / 2;
+    const centerIndex = Math.floor(total / 2);
     const offset = index - centerIndex;
-    const spacing = 70; // Slightly tighter spacing to fit all 22 cards
-    const maxRotation = 15;
+    const spacing = 80;
+    const maxRotation = 20;
     
     const rotation = (offset / centerIndex) * maxRotation;
     const x = offset * spacing;
-    const y = Math.abs(offset) * 8;
+    const y = Math.abs(offset) * 10;
 
     return { x, y, rotation };
   };
@@ -154,28 +153,10 @@ export default function CatTarotPage() {
 
           {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
               style={{
-                width: "95vw",
-                maxWidth: "1600px",
-                height: "calc(100vh - 180px)",
-                background: `
-                  repeating-linear-gradient(
-                    90deg,
-                    #8B4513 0px,
-                    #A0522D 2px,
-                    #8B4513 4px
-                  ),
-                  repeating-linear-gradient(
-                    0deg,
-                    #654321 0px,
-                    #8B4513 3px,
-                    #654321 6px
-                  )
-                `,
-                backgroundBlendMode: "multiply",
-                boxShadow: "inset 0 0 50px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.5)",
-                border: "8px solid #4A2511",
+                width: "600px",
+                height: "200px",
               }}
               data-testid="card-spread-container"
             >
