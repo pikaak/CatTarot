@@ -57,7 +57,7 @@ export default function CatTarotPage() {
       const j = Math.floor(Math.random() * (i + 1));
       [cards[i], cards[j]] = [cards[j], cards[i]];
     }
-    return cards.slice(0, 7);
+    return cards;
   };
 
   const handleCardStackClick = () => {
