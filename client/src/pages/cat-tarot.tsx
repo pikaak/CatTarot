@@ -121,14 +121,15 @@ export default function CatTarotPage() {
       return { x: 0, y: 0, rotation: 0 };
     }
 
-    const centerIndex = Math.floor(total / 2);
+    // Center the spread by using the middle card as reference
+    const centerIndex = (total - 1) / 2;
     const offset = index - centerIndex;
-    const spacing = 80;
-    const maxRotation = 20;
+    const spacing = 50; // Reduced spacing for more overlap
+    const maxRotation = 15;
     
     const rotation = (offset / centerIndex) * maxRotation;
     const x = offset * spacing;
-    const y = Math.abs(offset) * 10;
+    const y = Math.abs(offset) * 8;
 
     return { x, y, rotation };
   };
@@ -186,7 +187,7 @@ export default function CatTarotPage() {
                         transform: isSelected 
                           ? `translate(calc(${selectedPos?.x} + ${selectedPos?.offsetX}), -200px) scale(1.8)` 
                           : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg)`,
-                        left: isSelected ? '50%' : '0',
+                        left: isSelected ? '50%' : '50%',
                         opacity: 1,
                         zIndex: isSelected ? 10 : 1,
                       }}
