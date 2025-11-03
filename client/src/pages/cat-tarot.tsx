@@ -86,7 +86,7 @@ export default function CatTarotPage() {
     if (selectedCards.length >= 3) return;
 
     setFlippedCardIds(prev => [...prev, card.id]);
-    
+
     setTimeout(() => {
       const newSelected = [...selectedCards, card];
       setSelectedCards(newSelected);
@@ -125,7 +125,7 @@ export default function CatTarotPage() {
     const offset = index - centerIndex;
     const spacing = 80;
     const maxRotation = 20;
-    
+
     const rotation = (offset / centerIndex) * maxRotation;
     const x = offset * spacing;
     const y = Math.abs(offset) * 10;
@@ -165,24 +165,25 @@ export default function CatTarotPage() {
                   const pos = getCardPosition(index, shuffledCards.length);
                   const isSelected = selectedCards.find(c => c.id === card.id);
                   const isFlipped = flippedCardIds.includes(card.id);
+                  const selectedIndex = selectedCards.findIndex(c => c.id === card.id);
 
                   return (
-                    <div
+                    <TarotCard
                       key={card.id}
-                      className="absolute transition-all duration-700 ease-out"
+                      card={card}
+                      isFlipped={isFlipped}
+                      onClick={() => handleCardClick(card)}
+                      className={`absolute transition-all duration-700 ${
+                        gameState === "selecting" && !isSelected ? "cursor-pointer hover:scale-110" : ""
+                      }`}
                       style={{
-                        transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) ${isSelected ? 'scale(1.1)' : 'scale(1)'}`,
-                        opacity: isSelected ? 0.6 : 1,
-                        zIndex: isSelected ? 10 : 1,
+                        transform: isSelected
+                          ? `translateX(${selectedIndex * 180 - 180}px) translateY(-250px) scale(1.5)`
+                          : `translateX(${pos.x}px) translateY(${pos.y}px) rotate(${pos.rotation}deg)`,
+                        zIndex: isSelected ? 100 : 10,
+                        opacity: 1,
                       }}
-                      data-testid={`spread-card-${index}`}
-                    >
-                      <TarotCard
-                        card={card}
-                        isFlipped={isFlipped}
-                        onClick={() => handleCardClick(card)}
-                      />
-                    </div>
+                    />
                   );
                 })}
               </div>
