@@ -121,14 +121,15 @@ export default function CatTarotPage() {
       return { x: 0, y: 0, rotation: 0 };
     }
 
-    const centerIndex = Math.floor(total / 2);
+    // Center the spread by using the middle card as reference
+    const centerIndex = (total - 1) / 2;
     const offset = index - centerIndex;
-    const spacing = 80;
-    const maxRotation = 20;
+    const spacing = 70; // Slightly tighter spacing to fit all 22 cards
+    const maxRotation = 15;
     
     const rotation = (offset / centerIndex) * maxRotation;
     const x = offset * spacing;
-    const y = Math.abs(offset) * 10;
+    const y = Math.abs(offset) * 8;
 
     return { x, y, rotation };
   };
@@ -155,8 +156,8 @@ export default function CatTarotPage() {
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg"
               style={{
-                width: "90vw",
-                maxWidth: "1200px",
+                width: "95vw",
+                maxWidth: "1600px",
                 height: "calc(100vh - 180px)",
                 background: `
                   repeating-linear-gradient(
