@@ -153,10 +153,27 @@ export default function CatTarotPage() {
 
           {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg"
               style={{
-                width: "600px",
-                height: "200px",
+                width: "700px",
+                height: "400px",
+                background: `
+                  repeating-linear-gradient(
+                    90deg,
+                    #8B4513 0px,
+                    #A0522D 2px,
+                    #8B4513 4px
+                  ),
+                  repeating-linear-gradient(
+                    0deg,
+                    #654321 0px,
+                    #8B4513 3px,
+                    #654321 6px
+                  )
+                `,
+                backgroundBlendMode: "multiply",
+                boxShadow: "inset 0 0 50px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.5)",
+                border: "8px solid #4A2511",
               }}
               data-testid="card-spread-container"
             >
