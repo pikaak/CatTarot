@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, X } from "lucide-react";
 import { useState } from "react";
 import type { TarotCard } from "@shared/cards";
-import catAvatarImg from "@assets/generated_images/Fortune_teller_cat_avatar.png";
 
 interface ResultModalProps {
   isOpen: boolean;
@@ -36,6 +35,8 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
       handleClose();
     }
   };
+
+  const catAvatarImg = new URL("@assets/generated_images/Fortune_teller_cat_avatar.png", import.meta.url).href;
 
   const cardImages: Record<string, string> = {
     "@assets/generated_images/The_Cat_tarot_card_5842b39d.png": new URL("@assets/generated_images/The_Cat_tarot_card_5842b39d.png", import.meta.url).href,
