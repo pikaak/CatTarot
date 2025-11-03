@@ -146,19 +146,21 @@ export default function CatTarotPage() {
 
       <div className="pt-16 h-screen flex flex-col">
         <div className="flex-1 relative">
-          {gameState === "initial" && (
+          {(gameState === "initial" || gameState === "shuffling") && (
             <div
               className="absolute transition-all duration-1000 ease-out"
               style={{
-                bottom: "140px",
-                left: "2rem",
+                bottom: gameState === "shuffling" ? "50%" : "140px",
+                left: gameState === "shuffling" ? "50%" : "2rem",
+                transform: gameState === "shuffling" ? "translate(-50%, 50%)" : "none",
+                opacity: gameState === "shuffling" ? 0 : 1,
               }}
             >
-              <CardStack onClick={() => {}} />
+              <CardStack onClick={() => {}} isAnimating={gameState === "shuffling"} />
             </div>
           )}
 
-          {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
+          {(gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
               style={{
