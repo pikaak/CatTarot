@@ -205,6 +205,7 @@ export default function CatTarotPage() {
           <QuestionInput
             value={question}
             onChange={setQuestion}
+            onSubmit={handleCardStackClick}
             disabled={gameState !== "initial"}
           />
         </div>

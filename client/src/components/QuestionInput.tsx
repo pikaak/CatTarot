@@ -5,12 +5,19 @@ import { ArrowRight } from "lucide-react";
 interface QuestionInputProps {
   value: string;
   onChange: (question: string) => void;
+  onSubmit?: () => void;
   disabled?: boolean;
 }
 
-export default function QuestionInput({ value, onChange, disabled = false }: QuestionInputProps) {
+export default function QuestionInput({ value, onChange, onSubmit, disabled = false }: QuestionInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (value && value.trim() && onSubmit) {
+      onSubmit();
+    }
   };
 
   return (
@@ -30,8 +37,9 @@ export default function QuestionInput({ value, onChange, disabled = false }: Que
         />
         <Button
           size="icon"
+          onClick={handleSubmit}
           disabled={disabled || !value || !value.trim()}
-          className="h-12 w-12 rounded-full opacity-50 cursor-default"
+          className="h-12 w-12 rounded-full"
           data-testid="button-submit"
         >
           <ArrowRight className="h-5 w-5" />
