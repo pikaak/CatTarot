@@ -249,6 +249,7 @@ export default function CatTarotPage() {
                 customImage={catPhoto}
                 catName={catName}
                 onPhotoClick={handlePhotoClick}
+                onNameEdit={handlePhotoClick}
                 greetingKey={greetingKey}
               />
             </div>

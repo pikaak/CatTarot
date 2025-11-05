@@ -73,9 +73,9 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-4 mb-8 justify-center">
+        <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 justify-center flex-wrap">
           {selectedCards.map((card, index) => (
-            <div key={index} className="w-16 h-24 rounded-md shadow-md overflow-hidden">
+            <div key={index} className="w-32 h-48 md:w-40 md:h-60 rounded-md shadow-lg overflow-hidden flex-shrink-0">
               <img
                 src={cardImages[card.image] || cardImages["@assets/generated_images/The_Fool_tarot_card_d44cad26.png"]}
                 alt={card.name}

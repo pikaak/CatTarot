@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import catImage from "@assets/stock_images/friendly_orange_tabb_b7c12b4c.jpg";
-import { Camera } from "lucide-react";
+import { Camera, Pencil } from "lucide-react";
 
 interface TalkingCatProps {
   customImage?: string;
   catName?: string;
   onPhotoClick?: () => void;
+  onNameEdit?: () => void;
   greetingKey?: number;
 }
 
-export default function TalkingCat({ customImage, catName, onPhotoClick, greetingKey = 0 }: TalkingCatProps) {
+export default function TalkingCat({ customImage, catName, onPhotoClick, onNameEdit, greetingKey = 0 }: TalkingCatProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const { data: greeting } = useQuery<string>({
@@ -29,7 +30,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, greetin
     };
   }, []);
 
-  const greetingText = typeof greeting === 'string' ? greeting : "신비로운 여정을 시작하세요...";
+  const greetingText = typeof greeting === 'string' ? greeting : "냥!";
 
   const handlePhotoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,9 +45,21 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, greetin
       data-testid="talking-cat"
     >
       {catName && (
-        <h2 className="text-xl md:text-2xl font-bold text-foreground" data-testid="cat-name">
-          {catName}
-        </h2>
+        <div className="flex items-center gap-2 group/name">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground" data-testid="cat-name">
+            {catName}
+          </h2>
+          {onNameEdit && (
+            <button
+              onClick={onNameEdit}
+              className="p-1 rounded-md hover:bg-muted transition-colors opacity-0 group-hover/name:opacity-100"
+              aria-label="고양이 이름 수정"
+              data-testid="button-edit-name"
+            >
+              <Pencil className="w-4 h-4 text-muted-foreground" />
+            </button>
+          )}
+        </div>
       )}
       <div className="flex items-center gap-3 md:gap-4 group">
         <div 

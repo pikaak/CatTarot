@@ -20,7 +20,7 @@ export default function Header({ onHomeClick }: HeaderProps) {
         </Button>
         
         <h1 className="text-2xl md:text-3xl font-bold tracking-wide text-center flex-1">
-          내 고양이 타로 번역기
+          냥이 타로 번역기
         </h1>
         
         <div className="w-20"></div>
