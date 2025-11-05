@@ -14,22 +14,22 @@ export async function generateTarotReading(
   cards: { name: string; keywords: string[] }[]
 ): Promise<string> {
   const cardDescriptions = cards
-    .map((card, index) => `Card ${index + 1}: ${card.keywords.join(", ")}`)
+    .map((card, index) => `카드 ${index + 1}: ${card.keywords.join(", ")}`)
     .join("\n");
 
-  const prompt = `You are a young cat answering questions your human is asking about you.
-The human is asking about YOUR health, YOUR feelings, YOUR wants and needs.
-Respond from YOUR perspective as the cat, answering honestly about yourself.
-Your answer must be within 3 sentences.
-Do not use "meow," "nyang," emoticons, or casual interjections.
-Do not mention the card names or titles.
-Use simple, everyday words in a warm, honest tone.
-The human asked: "${question}"
+  const prompt = `당신은 집사가 당신에 대해 묻는 질문에 답하는 어린 고양이입니다.
+집사는 당신의 건강, 감정, 원하는 것과 필요한 것에 대해 묻고 있습니다.
+고양이로서 당신 자신의 관점에서 솔직하게 대답하세요.
+답변은 반드시 3문장 이내로 작성하세요.
+"야옹", "냥" 같은 소리나 이모티콘, 가벼운 감탄사를 사용하지 마세요.
+카드 이름이나 제목을 언급하지 마세요.
+따뜻하고 솔직한 어조로 평범하고 쉬운 말을 사용하세요.
+집사가 물었습니다: "${question}"
 
-Use these mystical insights to answer about yourself:
+이 신비로운 통찰을 사용하여 당신 자신에 대해 답하세요:
 ${cardDescriptions}
 
-Remember: Maximum 3 sentences, answer about yourself as the cat, no card names.`;
+기억하세요: 최대 3문장, 고양이로서 자신에 대해 답하기, 카드 이름 언급 금지, 반드시 한국어로 답변하세요.`;
 
   try {
     const response = await ai.models.generateContent({
@@ -46,9 +46,9 @@ Remember: Maximum 3 sentences, answer about yourself as the cat, no card names.`
 
 export async function generateGreeting(): Promise<string> {
   const greetings = [
-    "Generate a warm greeting from a young cat to its owner. Keep it under 12 words. Be affectionate and inviting. Do not use meow or nyang.",
-    "Generate a sweet message from a cat welcoming its human home. Keep it under 12 words. Sound happy to see them. Do not use meow or nyang.",
-    "Generate a brief, loving greeting from a young cat to its owner. Keep it under 12 words. Be warm and friendly. Do not use meow or nyang.",
+    "어린 고양이가 집사에게 하는 따뜻한 인사말을 생성하세요. 12단어 이내로 작성하세요. 애정있고 친근하게. '야옹'이나 '냥' 같은 소리를 사용하지 마세요. 반드시 한국어로 작성하세요.",
+    "고양이가 집에 돌아온 집사를 환영하는 다정한 메시지를 생성하세요. 12단어 이내로 작성하세요. 만나서 기쁜 느낌으로. '야옹'이나 '냥' 같은 소리를 사용하지 마세요. 반드시 한국어로 작성하세요.",
+    "어린 고양이가 집사에게 하는 짧고 사랑스러운 인사말을 생성하세요. 12단어 이내로 작성하세요. 따뜻하고 친근하게. '야옹'이나 '냥' 같은 소리를 사용하지 마세요. 반드시 한국어로 작성하세요.",
   ];
 
   const randomPrompt = greetings[Math.floor(Math.random() * greetings.length)];
@@ -59,9 +59,9 @@ export async function generateGreeting(): Promise<string> {
       contents: randomPrompt,
     });
     
-    return response.text || "Hello! I'm here for you...";
+    return response.text || "안녕! 기다렸어...";
   } catch (error) {
     console.error("Error generating greeting:", error);
-    return "Hello! I'm here for you...";
+    return "안녕! 기다렸어...";
   }
 }
