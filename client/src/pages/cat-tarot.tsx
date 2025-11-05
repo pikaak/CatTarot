@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MAJOR_ARCANA, type TarotCard as TarotCardType } from "@shared/cards";
+import { ALL_CARDS, type TarotCard as TarotCardType } from "@shared/cards";
 import Header from "@/components/Header";
 import CardStack from "@/components/CardStack";
 import TarotCard from "@/components/TarotCard";
@@ -52,7 +52,7 @@ export default function CatTarotPage() {
   });
 
   const shuffleCards = () => {
-    const cards = [...MAJOR_ARCANA];
+    const cards = [...ALL_CARDS];
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [cards[i], cards[j]] = [cards[j], cards[i]];
@@ -121,15 +121,19 @@ export default function CatTarotPage() {
       return { x: 0, y: 0, rotation: 0 };
     }
 
-    // Center the spread by using the middle card as reference
-    const centerIndex = (total - 1) / 2;
-    const offset = index - centerIndex;
-    const spacing = 50; // Reduced spacing for more overlap
-    const maxRotation = 15;
+    // Grid layout for all 78 cards
+    const cardsPerRow = 13;
+    const row = Math.floor(index / cardsPerRow);
+    const col = index % cardsPerRow;
     
-    const rotation = (offset / centerIndex) * maxRotation;
-    const x = offset * spacing;
-    const y = Math.abs(offset) * 8;
+    const cardWidth = 80;
+    const cardHeight = 120;
+    const horizontalSpacing = cardWidth + 10;
+    const verticalSpacing = cardHeight + 10;
+
+    const x = col * horizontalSpacing;
+    const y = row * verticalSpacing;
+    const rotation = (Math.random() - 0.5) * 8; // Slight random rotation
 
     return { x, y, rotation };
   };
@@ -154,14 +158,10 @@ export default function CatTarotPage() {
 
           {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
-              style={{
-                width: "600px",
-                height: "200px",
-              }}
+              className="absolute inset-0 overflow-y-auto overflow-x-hidden pt-4 pb-32"
               data-testid="card-spread-container"
             >
-              <div className="relative w-full h-full flex items-center justify-center">
+              <div className="relative min-h-full" style={{ width: '1200px', margin: '0 auto', minHeight: '800px' }}>
                 {shuffledCards.map((card, index) => {
                   const pos = getCardPosition(index, shuffledCards.length);
                   const isSelected = selectedCards.find(c => c.id === card.id);
@@ -170,10 +170,15 @@ export default function CatTarotPage() {
                   const selectedIndex = selectedCards.findIndex(c => c.id === card.id);
                   const getSelectedPosition = () => {
                     if (selectedIndex === -1) return null;
-                    const positions = [
-                      { x: '-50%', offsetX: '-120px' }, // Left
-                      { x: '-50%', offsetX: '0px' },     // Center
-                      { x: '-50%', offsetX: '120px' }    // Right
+                    const isMobile = window.innerWidth < 768;
+                    const positions = isMobile ? [
+                      { top: '10px', left: '50%', translateX: '-120px', scale: 1.2 },
+                      { top: '10px', left: '50%', translateX: '0px', scale: 1.2 },
+                      { top: '10px', left: '50%', translateX: '120px', scale: 1.2 }
+                    ] : [
+                      { top: '20px', left: '50%', translateX: '-200px', scale: 1.8 },
+                      { top: '20px', left: '50%', translateX: '0px', scale: 1.8 },
+                      { top: '20px', left: '50%', translateX: '200px', scale: 1.8 }
                     ];
                     return positions[selectedIndex];
                   };
@@ -185,11 +190,13 @@ export default function CatTarotPage() {
                       className="absolute transition-all duration-700 ease-out"
                       style={{
                         transform: isSelected 
-                          ? `translate(calc(${selectedPos?.x} + ${selectedPos?.offsetX}), -200px) scale(1.8)` 
+                          ? `translate(calc(${selectedPos?.translateX}), 0) scale(${selectedPos?.scale})` 
                           : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg)`,
-                        left: isSelected ? '50%' : '50%',
+                        left: isSelected ? selectedPos?.left : '0',
+                        top: isSelected ? selectedPos?.top : '0',
                         opacity: 1,
                         zIndex: isSelected ? 10 : 1,
+                        position: isSelected ? 'fixed' : 'absolute',
                       }}
                       data-testid={`spread-card-${index}`}
                     >
