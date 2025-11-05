@@ -65,7 +65,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-md md:max-w-lg rounded-2xl p-8 md:p-12" data-testid="modal-result" hideClose>
+      <DialogContent className="max-w-md md:max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl p-6 md:p-12" data-testid="modal-result" hideClose>
         <DialogHeader>
           <DialogTitle className="sr-only">고양이의 리딩</DialogTitle>
           <DialogDescription className="sr-only">
@@ -73,7 +73,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 justify-center flex-wrap">
+        <div className="flex gap-3 md:gap-4 mb-4 md:mb-6 justify-center flex-wrap">
           {selectedCards.map((card, index) => (
             <div key={index} className="w-32 h-48 md:w-40 md:h-60 rounded-md shadow-lg overflow-hidden flex-shrink-0">
               <img
@@ -115,7 +115,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         )}
 
         {currentPage === totalPages - 1 && (
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-6 mb-2">
             <Button onClick={handleClose} data-testid="button-done">
               완료
             </Button>

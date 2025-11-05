@@ -164,7 +164,7 @@ export default function CatTarotPage() {
       const hasCompleted = localStorage.getItem(READING_COMPLETED_KEY);
       if (hasCompleted === 'true') {
         // Invalidate the greeting query to force a new fetch
-        queryClient.invalidateQueries({ queryKey: ['/api/greeting'] });
+        queryClient.invalidateQueries({ queryKey: ['greeting'] });
       }
     }
   };
@@ -203,7 +203,8 @@ export default function CatTarotPage() {
     // Available area (accounting for header and input)
     const headerHeight = 64;
     const inputHeight = 100;
-    const availableWidth = viewportWidth - 40; // padding
+    const padding = isMobile ? 20 : 40; // Less padding on mobile
+    const availableWidth = viewportWidth - (padding * 2);
     const availableHeight = viewportHeight - headerHeight - inputHeight - 40;
     
     // Calculate rows and columns with heavy overlap
@@ -217,10 +218,10 @@ export default function CatTarotPage() {
     const row = Math.floor(index / cols);
     const col = index % cols;
     
-    // Center the spread
-    const totalWidth = (cols - 1) * horizontalSpacing;
-    const totalHeight = (rows - 1) * verticalSpacing;
-    const offsetX = (availableWidth - totalWidth) / 2;
+    // Center the spread with proper padding offset
+    const totalWidth = (cols - 1) * horizontalSpacing + cardWidth;
+    const totalHeight = (rows - 1) * verticalSpacing + cardHeight;
+    const offsetX = padding + (availableWidth - totalWidth) / 2;
     const offsetY = (availableHeight - totalHeight) / 2;
     
     const x = offsetX + col * horizontalSpacing;

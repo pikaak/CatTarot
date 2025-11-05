@@ -15,7 +15,16 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
   const [isAnimating, setIsAnimating] = useState(false);
 
   const { data: greeting } = useQuery<string>({
-    queryKey: ['/api/greeting', greetingKey],
+    queryKey: ['greeting', greetingKey],
+    queryFn: async () => {
+      const response = await fetch('/api/greeting', {
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch greeting');
+      }
+      return await response.json();
+    },
   });
 
   const hasCustomImage = !!customImage;
