@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ALL_CARDS, type TarotCard as TarotCardType } from "@shared/cards";
 import Header from "@/components/Header";
 import TalkingCat from "@/components/TalkingCat";
+import CatPhotoUpload from "@/components/CatPhotoUpload";
 import TarotCard from "@/components/TarotCard";
 import QuestionInput from "@/components/QuestionInput";
 import ResultModal from "@/components/ResultModal";
@@ -20,6 +21,8 @@ interface TarotReadingResponse {
   reading: string;
 }
 
+const CAT_PHOTO_KEY = 'cat-tarot-custom-photo';
+
 export default function CatTarotPage() {
   const [gameState, setGameState] = useState<GameState>("initial");
   const [question, setQuestion] = useState("");
@@ -28,6 +31,8 @@ export default function CatTarotPage() {
   const [flippedCardIds, setFlippedCardIds] = useState<number[]>([]);
   const [reading, setReading] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showPhotoUpload, setShowPhotoUpload] = useState(false);
+  const [catPhoto, setCatPhoto] = useState<string>("");
   const [viewport, setViewport] = useState({ width: 1920, height: 1080 });
   const { toast } = useToast();
 
@@ -39,6 +44,17 @@ export default function CatTarotPage() {
       updateViewport();
       window.addEventListener('resize', updateViewport);
       return () => window.removeEventListener('resize', updateViewport);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(CAT_PHOTO_KEY);
+      if (saved) {
+        setCatPhoto(saved);
+      } else {
+        setShowPhotoUpload(true);
+      }
     }
   }, []);
 
@@ -128,6 +144,21 @@ export default function CatTarotPage() {
     readingMutation.reset();
   };
 
+  const handlePhotoUpload = (imageDataUrl: string) => {
+    setCatPhoto(imageDataUrl);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(CAT_PHOTO_KEY, imageDataUrl);
+    }
+    toast({
+      title: "Photo saved!",
+      description: "Your cat photo has been updated.",
+    });
+  };
+
+  const handlePhotoClick = () => {
+    setShowPhotoUpload(true);
+  };
+
   const getCardPosition = (index: number, total: number) => {
     if (gameState === "initial" || gameState === "shuffling") {
       return { x: 0, y: 0, rotation: 0 };
@@ -187,7 +218,11 @@ export default function CatTarotPage() {
                 transform: "translate(-50%, -50%)",
               }}
             >
-              <TalkingCat onClick={handleCardStackClick} />
+              <TalkingCat 
+                onClick={handleCardStackClick} 
+                customImage={catPhoto}
+                onPhotoClick={handlePhotoClick}
+              />
             </div>
           )}
 
@@ -275,6 +310,13 @@ export default function CatTarotPage() {
         onClose={handleReset}
         selectedCards={selectedCards}
         reading={reading}
+      />
+
+      <CatPhotoUpload
+        isOpen={showPhotoUpload}
+        onClose={() => setShowPhotoUpload(false)}
+        onUpload={handlePhotoUpload}
+        currentImage={catPhoto}
       />
     </div>
   );

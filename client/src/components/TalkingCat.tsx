@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import catImage from "@assets/stock_images/friendly_orange_tabb_b7c12b4c.jpg";
+import { Camera } from "lucide-react";
 
 interface TalkingCatProps {
   onClick: () => void;
+  customImage?: string;
+  onPhotoClick?: () => void;
 }
 
-export default function TalkingCat({ onClick }: TalkingCatProps) {
+export default function TalkingCat({ onClick, customImage, onPhotoClick }: TalkingCatProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const { data: greeting } = useQuery<string>({
     queryKey: ['/api/greeting'],
   });
+
+  const hasCustomImage = !!customImage;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,6 +30,13 @@ export default function TalkingCat({ onClick }: TalkingCatProps) {
 
   const greetingText = typeof greeting === 'string' ? greeting : "Click to begin your mystical journey...";
 
+  const handlePhotoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onPhotoClick) {
+      onPhotoClick();
+    }
+  };
+
   return (
     <div 
       className="flex items-center gap-4 cursor-pointer group"
@@ -32,15 +44,28 @@ export default function TalkingCat({ onClick }: TalkingCatProps) {
       data-testid="talking-cat"
     >
       <div 
-        className={`relative transition-all duration-500 ${isAnimating ? 'scale-105' : 'scale-100'}`}
+        className="relative transition-all duration-500 cursor-pointer"
         style={{ width: "120px", height: "120px" }}
+        onClick={handlePhotoClick}
+        data-testid="cat-image-area"
       >
-        <img
-          src={catImage}
-          alt="Mystical cat"
-          className="w-full h-full object-cover rounded-full shadow-xl border-4 border-primary/30"
-        />
+        {customImage ? (
+          <img
+            src={customImage}
+            alt="Your cat"
+            className="w-full h-full object-cover rounded-full shadow-xl border-4 border-primary/30"
+          />
+        ) : (
+          <div className="w-full h-full rounded-full shadow-xl border-4 border-primary/30 bg-muted flex items-center justify-center">
+            <Camera className="w-12 h-12 text-muted-foreground" />
+          </div>
+        )}
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-transparent animate-pulse" />
+        {hasCustomImage && (
+          <div className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+            <Camera className="w-4 h-4 text-primary-foreground" />
+          </div>
+        )}
       </div>
 
       <div 
