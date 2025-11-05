@@ -5,14 +5,16 @@ import { Camera } from "lucide-react";
 
 interface TalkingCatProps {
   customImage?: string;
+  catName?: string;
   onPhotoClick?: () => void;
+  greetingKey?: number;
 }
 
-export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProps) {
+export default function TalkingCat({ customImage, catName, onPhotoClick, greetingKey = 0 }: TalkingCatProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const { data: greeting } = useQuery<string>({
-    queryKey: ['/api/greeting'],
+    queryKey: ['/api/greeting', greetingKey],
   });
 
   const hasCustomImage = !!customImage;
@@ -38,15 +40,21 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
 
   return (
     <div 
-      className="flex items-center gap-3 md:gap-4 group"
+      className="flex flex-col items-center gap-2"
       data-testid="talking-cat"
     >
-      <div 
-        className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
-        style={{ width: "140px", height: "140px" }}
-        onClick={handlePhotoClick}
-        data-testid="cat-image-area"
-      >
+      {catName && (
+        <h2 className="text-xl md:text-2xl font-bold text-foreground" data-testid="cat-name">
+          {catName}
+        </h2>
+      )}
+      <div className="flex items-center gap-3 md:gap-4 group">
+        <div 
+          className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
+          style={{ width: "140px", height: "140px" }}
+          onClick={handlePhotoClick}
+          data-testid="cat-image-area"
+        >
         {customImage ? (
           <img
             src={customImage}
@@ -77,9 +85,10 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
           className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-[2px] w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-card"
         />
         
-        <p className="text-foreground font-serif text-lg italic">
-          {greetingText}
-        </p>
+          <p className="text-foreground font-serif text-lg italic">
+            {greetingText}
+          </p>
+        </div>
       </div>
     </div>
   );

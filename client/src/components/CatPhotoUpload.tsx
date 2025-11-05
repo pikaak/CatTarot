@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Upload } from "lucide-react";
 
 interface CatPhotoUploadProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpload: (imageDataUrl: string) => void;
+  onUpload: (imageDataUrl: string, catName: string) => void;
   currentImage?: string;
+  currentName?: string;
 }
 
-export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage }: CatPhotoUploadProps) {
+export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage, currentName }: CatPhotoUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentImage || null);
+  const [catName, setCatName] = useState(currentName || "");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -26,14 +29,15 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
   };
 
   const handleSave = () => {
-    if (preview) {
-      onUpload(preview);
+    if (preview && catName.trim()) {
+      onUpload(preview, catName.trim());
       onClose();
     }
   };
 
   const handleClose = () => {
     setPreview(currentImage || null);
+    setCatName(currentName || "");
     onClose();
   };
 
@@ -45,6 +49,20 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
         </DialogHeader>
 
         <div className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="cat-name-input" className="text-sm font-medium">
+              고양이 이름
+            </label>
+            <Input
+              id="cat-name-input"
+              type="text"
+              placeholder="고양이 이름을 입력하세요"
+              value={catName}
+              onChange={(e) => setCatName(e.target.value)}
+              data-testid="input-cat-name"
+            />
+          </div>
+
           {preview && (
             <div className="flex justify-center">
               <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary/30">
@@ -87,10 +105,10 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
             </Button>
             <Button 
               onClick={handleSave} 
-              disabled={!preview}
+              disabled={!preview || !catName.trim()}
               data-testid="button-save-cat-photo"
             >
-              사진 저장
+              저장
             </Button>
           </div>
         </div>

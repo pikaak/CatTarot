@@ -22,6 +22,8 @@ interface TarotReadingResponse {
 }
 
 const CAT_PHOTO_KEY = 'cat-tarot-custom-photo';
+const CAT_NAME_KEY = 'cat-tarot-cat-name';
+const READING_COMPLETED_KEY = 'cat-tarot-reading-completed';
 
 export default function CatTarotPage() {
   const [gameState, setGameState] = useState<GameState>("initial");
@@ -33,6 +35,8 @@ export default function CatTarotPage() {
   const [showModal, setShowModal] = useState(false);
   const [showPhotoUpload, setShowPhotoUpload] = useState(false);
   const [catPhoto, setCatPhoto] = useState<string>("");
+  const [catName, setCatName] = useState<string>("");
+  const [greetingKey, setGreetingKey] = useState(0);
   const [viewport, setViewport] = useState({ width: 1920, height: 1080 });
   const { toast } = useToast();
 
@@ -49,9 +53,11 @@ export default function CatTarotPage() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(CAT_PHOTO_KEY);
-      if (saved) {
-        setCatPhoto(saved);
+      const savedPhoto = localStorage.getItem(CAT_PHOTO_KEY);
+      const savedName = localStorage.getItem(CAT_NAME_KEY);
+      if (savedPhoto && savedName) {
+        setCatPhoto(savedPhoto);
+        setCatName(savedName);
       } else {
         setShowPhotoUpload(true);
       }
@@ -67,6 +73,10 @@ export default function CatTarotPage() {
       setReading(data.reading);
       setTimeout(() => {
         setShowModal(true);
+        // Mark that a reading has been completed
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(READING_COMPLETED_KEY, 'true');
+        }
       }, 800);
     },
     onError: (error) => {
@@ -142,16 +152,26 @@ export default function CatTarotPage() {
     setReading("");
     setShowModal(false);
     readingMutation.reset();
+    
+    // Refresh greeting if a reading has been completed before
+    if (typeof window !== 'undefined') {
+      const hasCompleted = localStorage.getItem(READING_COMPLETED_KEY);
+      if (hasCompleted === 'true') {
+        setGreetingKey(prev => prev + 1);
+      }
+    }
   };
 
-  const handlePhotoUpload = (imageDataUrl: string) => {
+  const handlePhotoUpload = (imageDataUrl: string, name: string) => {
     setCatPhoto(imageDataUrl);
+    setCatName(name);
     if (typeof window !== 'undefined') {
       localStorage.setItem(CAT_PHOTO_KEY, imageDataUrl);
+      localStorage.setItem(CAT_NAME_KEY, name);
     }
     toast({
-      title: "사진 저장됨!",
-      description: "고양이 사진이 업데이트되었습니다.",
+      title: "저장됨!",
+      description: `${name}의 사진이 업데이트되었습니다.`,
     });
   };
 
@@ -220,7 +240,9 @@ export default function CatTarotPage() {
             >
               <TalkingCat 
                 customImage={catPhoto}
+                catName={catName}
                 onPhotoClick={handlePhotoClick}
+                greetingKey={greetingKey}
               />
             </div>
           )}
@@ -326,6 +348,7 @@ export default function CatTarotPage() {
         onClose={() => setShowPhotoUpload(false)}
         onUpload={handlePhotoUpload}
         currentImage={catPhoto}
+        currentName={catName}
       />
     </div>
   );
