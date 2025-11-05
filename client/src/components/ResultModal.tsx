@@ -86,7 +86,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         </div>
 
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 animate-bounce">
             <img
               src={catAvatarImg}
               alt="고양이 아바타"
