@@ -10,13 +10,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-**November 5, 2025**
+**November 5, 2025 (Latest)**
+- **Cat Name Feature**: Added cat name input field to photo upload modal with localStorage persistence
+- Cat name displayed above cat photo in TalkingCat component
+- **Greeting Refresh System**: Greetings automatically refresh after completing first tarot reading (queryClient.invalidateQueries approach)
+- **Informal Speech (반말)**: All AI responses now use warm, friendly informal Korean speech
+- UI text updates: "고양이어 번역 중" (loading), "번역 완료!" (result title), "내 고양이 타로 번역기" (app title)
+- **Noto Sans KR Font**: Implemented modern Korean typography for entire UI
+- Fixed localStorage hydration to independently restore cat name and photo
+- Fixed card click handling by adding pointer-events-none to all TarotCard child elements
+
+**November 5, 2025 (Earlier)**
 - **Language Change**: All UI and AI responses now in Korean (card selection counter, loading overlay, input placeholder, greetings, readings)
 - **Card System Change**: Replaced all 78 cards with Mystical Cats Tarot system with Korean keywords
 - Added custom cat photo upload feature with localStorage persistence
 - Changed interaction flow: Arrow button in input triggers shuffle (not clicking talking cat)
 - Added prominent card selection counter at top of screen (Korean: "카드 3장을 선택하세요")
-- Implemented full-screen loading overlay with animation (Korean: "고양이가 우주의 힘을 상담하고 있어요...")
+- Implemented full-screen loading overlay with animation
 - TalkingCat now shows camera icon placeholder when no photo uploaded
 - Auto-prompts for photo upload on first visit
 - Fixed SSR bug by guarding all window access in useEffect with viewport state
@@ -53,20 +63,32 @@ Preferred communication style: Simple, everyday language.
 - No global state management library (Redux/Zustand) - relying on React Query's cache and component composition
 
 **Design System**
-- Typography: Cinzel/Playfair Display (serif) for headings, Inter/Source Sans Pro for body text
+- Typography: Noto Sans KR (Korean sans-serif) for modern, clean Korean text rendering
 - Spacing: Tailwind's standard spacing scale (2, 4, 6, 8, 12, 16, 20)
 - Responsive: Mobile-first with breakpoints for tablet/desktop layouts
 - Animation: CSS transitions and transform-based card animations
+- Language: All UI text and AI responses in Korean using informal speech (반말)
 
 **Component Architecture**
 - Atomic design pattern with reusable UI components in `/components/ui`
 - Feature components: TalkingCat, CatPhotoUpload, TarotCard, QuestionInput, ResultModal, Header
 - Each component is self-contained with props-based configuration
-- TalkingCat component features AI-generated greetings, custom/placeholder cat image, and speech bubble UI
-- CatPhotoUpload component manages custom cat photo with localStorage persistence and preview
+- TalkingCat component features:
+  - AI-generated greetings that refresh after each completed reading
+  - Custom/placeholder cat image display
+  - Cat name display above photo
+  - Speech bubble UI with dynamic Korean greetings in informal speech (반말)
+- CatPhotoUpload component:
+  - Cat name input field with validation
+  - Custom cat photo upload with localStorage persistence (CAT_PHOTO_KEY, CAT_NAME_KEY)
+  - Independent hydration of saved name and photo
+  - Preview functionality
+- TarotCard component:
+  - All child elements use pointer-events-none for reliable click handling
+  - Only outermost div receives click events
 - QuestionInput includes arrow button to start reading (replaces clicking on talking cat)
 - Prominent card selection counter appears at top of screen showing remaining cards to select
-- Full-screen loading overlay displays while AI generates reading
+- Full-screen loading overlay displays while AI generates reading (Korean: "고양이어 번역 중")
 - Selected cards enlarge in place (scale up) without moving from their spread position
 - Modal uses z-index 200 to float above selected cards (z-index 100)
 
@@ -106,10 +128,11 @@ Preferred communication style: Simple, everyday language.
 - Google Generative AI (Gemini 2.5 Flash model via Replit AI Integrations)
 - API key configured via environment variable: `AI_INTEGRATIONS_GEMINI_API_KEY`
 - Two AI functions:
-  1. `generateTarotReading()` - Cat responds from its own perspective about itself (health, feelings, wants) using tarot insights (max 3 sentences, warm honest tone, no card names)
-  2. `generateGreeting()` - Creates warm, affectionate greetings from the cat to its owner
+  1. `generateTarotReading()` - Cat responds from its own perspective about itself (health, feelings, wants) using tarot insights (max 3 sentences, warm honest tone, informal Korean/반말, no card names)
+  2. `generateGreeting()` - Creates warm, affectionate greetings from the cat to its owner in informal Korean (반말)
 - Context: User asks questions ABOUT their cat, and the cat answers about itself
 - Prompt engineering ensures the cat speaks as itself, not as a fortune-teller
+- Greeting refresh system: Uses queryClient.invalidateQueries to fetch new greetings after completing readings (tracked via READING_COMPLETED_KEY in localStorage)
 
 **Database**
 - Drizzle ORM configured with PostgreSQL dialect

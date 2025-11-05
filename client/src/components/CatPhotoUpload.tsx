@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload } from "lucide-react";
@@ -46,6 +46,9 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
       <DialogContent className="max-w-md" data-testid="cat-photo-upload-dialog">
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif text-center">고양이 사진을 업로드하세요!</DialogTitle>
+          <DialogDescription className="sr-only">
+            고양이 이름과 사진을 업로드하여 타로 경험을 개인화하세요
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

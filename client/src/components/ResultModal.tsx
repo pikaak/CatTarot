@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, X } from "lucide-react";
 import { useState } from "react";
@@ -68,6 +68,9 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
       <DialogContent className="max-w-md md:max-w-lg rounded-2xl p-8 md:p-12" data-testid="modal-result" hideClose>
         <DialogHeader>
           <DialogTitle className="sr-only">고양이의 리딩</DialogTitle>
+          <DialogDescription className="sr-only">
+            고양이가 선택한 타로 카드를 바탕으로 답변합니다
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex gap-4 mb-8 justify-center">
