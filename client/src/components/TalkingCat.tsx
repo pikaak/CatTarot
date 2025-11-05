@@ -38,12 +38,12 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
 
   return (
     <div 
-      className="flex items-center gap-4 group"
+      className="flex items-center gap-3 md:gap-4 group"
       data-testid="talking-cat"
     >
       <div 
-        className="relative transition-all duration-500 cursor-pointer"
-        style={{ width: "120px", height: "120px" }}
+        className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
+        style={{ width: "140px", height: "140px" }}
         onClick={handlePhotoClick}
         data-testid="cat-image-area"
       >
@@ -67,7 +67,7 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
       </div>
 
       <div 
-        className="relative bg-card border-2 border-primary/30 rounded-2xl px-6 py-4 shadow-xl max-w-md"
+        className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl max-w-[200px] md:max-w-md flex-1"
         data-testid="speech-bubble"
       >
         <div 
