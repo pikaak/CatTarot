@@ -23,12 +23,12 @@ export default function QuestionInput({ value, onChange, onSubmit, disabled = fa
   return (
     <div className="space-y-4">
       <div className="h-24 border-t flex items-center justify-center text-muted-foreground text-sm">
-        Ad Space Reserved
+        광고 공간
       </div>
       <div className="flex gap-2 items-center">
         <Input
           type="text"
-          placeholder="Enter your question..."
+          placeholder="질문을 입력하세요..."
           value={value}
           onChange={handleChange}
           disabled={disabled}

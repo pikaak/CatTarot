@@ -71,8 +71,8 @@ export default function CatTarotPage() {
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: "Failed to generate reading. Please try again.",
+        title: "오류",
+        description: "리딩 생성에 실패했습니다. 다시 시도해주세요.",
         variant: "destructive",
       });
       setGameState("selecting");
@@ -91,7 +91,7 @@ export default function CatTarotPage() {
   const handleCardStackClick = () => {
     if (!question) {
       toast({
-        title: "Please enter your question",
+        title: "질문을 입력해주세요",
         variant: "destructive",
       });
       return;
@@ -150,8 +150,8 @@ export default function CatTarotPage() {
       localStorage.setItem(CAT_PHOTO_KEY, imageDataUrl);
     }
     toast({
-      title: "Photo saved!",
-      description: "Your cat photo has been updated.",
+      title: "사진 저장됨!",
+      description: "고양이 사진이 업데이트되었습니다.",
     });
   };
 
@@ -281,9 +281,9 @@ export default function CatTarotPage() {
           {gameState === "selecting" && (
             <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
               <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
-                {selectedCards.length === 0 && "Select 3 cards to reveal your fortune"}
-                {selectedCards.length === 1 && "Select 2 more cards"}
-                {selectedCards.length === 2 && "Select 1 more card"}
+                {selectedCards.length === 0 && "카드 3장을 선택하세요"}
+                {selectedCards.length === 1 && "카드 2장을 더 선택하세요"}
+                {selectedCards.length === 2 && "카드 1장을 더 선택하세요"}
               </div>
             </div>
           )}
@@ -292,7 +292,7 @@ export default function CatTarotPage() {
             <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
               <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
                 <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
-                  Your cat is consulting the cosmic forces...
+                  고양이가 우주의 힘을 상담하고 있어요...
                 </div>
                 <div className="flex justify-center gap-2">
                   <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>

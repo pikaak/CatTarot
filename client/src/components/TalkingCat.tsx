@@ -27,7 +27,7 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
     };
   }, []);
 
-  const greetingText = typeof greeting === 'string' ? greeting : "Click to begin your mystical journey...";
+  const greetingText = typeof greeting === 'string' ? greeting : "신비로운 여정을 시작하세요...";
 
   const handlePhotoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -50,7 +50,7 @@ export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProp
         {customImage ? (
           <img
             src={customImage}
-            alt="Your cat"
+            alt="당신의 고양이"
             className="w-full h-full object-cover rounded-full shadow-xl border-4 border-primary/30"
           />
         ) : (

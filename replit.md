@@ -11,10 +11,12 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 **November 5, 2025**
+- **Language Change**: All UI and AI responses now in Korean (card selection counter, loading overlay, input placeholder, greetings, readings)
+- **Card System Change**: Replaced all 78 cards with Mystical Cats Tarot system with Korean keywords
 - Added custom cat photo upload feature with localStorage persistence
 - Changed interaction flow: Arrow button in input triggers shuffle (not clicking talking cat)
-- Added prominent card selection counter at top of screen ("Select 3 cards", "Select 2 more cards", etc.)
-- Implemented full-screen loading overlay with animation while AI generates reading (z-150, above selected cards)
+- Added prominent card selection counter at top of screen (Korean: "카드 3장을 선택하세요")
+- Implemented full-screen loading overlay with animation (Korean: "고양이가 우주의 힘을 상담하고 있어요...")
 - TalkingCat now shows camera icon placeholder when no photo uploaded
 - Auto-prompts for photo upload on first visit
 - Fixed SSR bug by guarding all window access in useEffect with viewport state

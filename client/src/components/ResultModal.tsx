@@ -67,7 +67,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md md:max-w-lg rounded-2xl p-8 md:p-12" data-testid="modal-result" hideClose>
         <DialogHeader>
-          <DialogTitle className="sr-only">Your Cat's Reading</DialogTitle>
+          <DialogTitle className="sr-only">고양이의 리딩</DialogTitle>
         </DialogHeader>
 
         <div className="flex gap-4 mb-8 justify-center">
@@ -86,11 +86,11 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
           <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
             <img
               src={catAvatarImg}
-              alt="Fortune teller cat"
+              alt="고양이 아바타"
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-sm text-muted-foreground">Your Cat's Thoughts</div>
+          <div className="text-sm text-muted-foreground">고양이의 생각</div>
         </div>
 
         <div className="relative min-h-[120px]">
@@ -114,7 +114,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         {currentPage === totalPages - 1 && (
           <div className="flex justify-center mt-6">
             <Button onClick={handleClose} data-testid="button-done">
-              Done
+              완료
             </Button>
           </div>
         )}

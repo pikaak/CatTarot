@@ -37,7 +37,7 @@ ${cardDescriptions}
       contents: prompt,
     });
     
-    return response.text || "Your cat is mysteriously silent at the moment.";
+    return response.text || "고양이가 지금은 조용히 있네요...";
   } catch (error) {
     console.error("Error generating tarot reading:", error);
     throw new Error("Failed to generate reading");
