@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cat Tarot is an interactive web application where users can ask questions about their cat and receive answers from their cat's perspective using tarot card insights. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated responses where the cat speaks directly to its owner. Users ask questions ABOUT their cat (health, feelings, wants, needs), and the young cat responds honestly about itself. The application features a talking cat interface with personalized greetings, custom cat photo upload capability, overlapping card spread layout, prominent card selection counter, loading indicators, and smooth animations for an engaging user experience.
+Cat Tarot is an interactive web application where users can ask questions about their cat and receive answers from their cat's perspective using tarot card insights. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated responses where the cat speaks directly to its owner. Users ask questions ABOUT their cat (health, feelings, wants, needs), and the young cat responds honestly about itself. The application features a talking cat interface with personalized greetings, editable cat names and photos, overlapping card spread layout, prominent card selection counter, large visible result cards, loading indicators, and smooth animations for an engaging user experience.
 
 ## User Preferences
 
@@ -10,12 +10,20 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-**November 5, 2025 (Latest)**
+**November 5, 2025 (Latest Session)**
+- **Editable Cat Names**: Added pencil icon button next to cat name (appears on hover) to edit name and photo
+- **Updated Branding**: Changed app title from "내 고양이 타로 번역기" to "냥이 타로 번역기"
+- **Updated Default Greeting**: Changed from "신비로운 여정을 시작하세요..." to "냥!"
+- **Larger Result Cards**: Increased card size in result modal from w-16 h-24 to w-32 h-48 (mobile) and w-40 h-60 (desktop) for better visibility
+- Added flex-wrap and flex-shrink-0 to result cards for mobile responsiveness
+- Fixed accessibility warnings by adding DialogDescription to all modals
+
+**November 5, 2025 (Earlier Session)**
 - **Cat Name Feature**: Added cat name input field to photo upload modal with localStorage persistence
 - Cat name displayed above cat photo in TalkingCat component
 - **Greeting Refresh System**: Greetings automatically refresh after completing first tarot reading (queryClient.invalidateQueries approach)
 - **Informal Speech (반말)**: All AI responses now use warm, friendly informal Korean speech
-- UI text updates: "고양이어 번역 중" (loading), "번역 완료!" (result title), "내 고양이 타로 번역기" (app title)
+- UI text updates: "고양이어 번역 중" (loading), "번역 완료!" (result title)
 - **Noto Sans KR Font**: Implemented modern Korean typography for entire UI
 - Fixed localStorage hydration to independently restore cat name and photo
 - Fixed card click handling by adding pointer-events-none to all TarotCard child elements
@@ -76,8 +84,10 @@ Preferred communication style: Simple, everyday language.
 - TalkingCat component features:
   - AI-generated greetings that refresh after each completed reading
   - Custom/placeholder cat image display
-  - Cat name display above photo
+  - Cat name display above photo with editable pencil icon (appears on hover)
+  - Edit button opens photo upload modal for name/photo changes
   - Speech bubble UI with dynamic Korean greetings in informal speech (반말)
+  - Default greeting: "냥!"
 - CatPhotoUpload component:
   - Cat name input field with validation
   - Custom cat photo upload with localStorage persistence (CAT_PHOTO_KEY, CAT_NAME_KEY)
