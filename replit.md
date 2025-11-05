@@ -11,7 +11,7 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 **November 5, 2025 (Latest Session - Bug Fixes & Animation)**
-- **Animated Cat Avatar**: Added bounce animation to fortune teller cat avatar in results modal for more engaging experience
+- **Animated Cat Avatar**: Added pulsating animation to fortune teller cat avatar in results modal for more engaging experience
 - **Fixed Greeting API**: Changed queryKey format to use custom queryFn, fixing issue where AI greetings weren't displaying (was showing only "냥!" fallback)
 - **Fixed Card Spread Positioning**: Corrected mobile layout regression where cards shifted right - now properly centered with responsive padding
 - **Fixed ResultModal Overflow**: Added max-h-[90vh] with overflow-y-auto to prevent Done button from being cut off on mobile
