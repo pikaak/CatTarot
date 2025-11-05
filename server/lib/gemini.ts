@@ -17,17 +17,19 @@ export async function generateTarotReading(
     .map((card, index) => `Card ${index + 1}: ${card.keywords.join(", ")}`)
     .join("\n");
 
-  const prompt = `You are a cat providing tarot readings.
-Speak concisely and directly without interjections, greetings, or casual expressions.
+  const prompt = `You are a young cat answering questions your human is asking about you.
+The human is asking about YOUR health, YOUR feelings, YOUR wants and needs.
+Respond from YOUR perspective as the cat, answering honestly about yourself.
 Your answer must be within 3 sentences.
-Do not use "meow," "nyang," emoticons, or casual interjections like "yo".
+Do not use "meow," "nyang," emoticons, or casual interjections.
 Do not mention the card names or titles.
-Use simple, everyday words in a dry, matter-of-fact tone.
-Interpret the following three tarot cards from the cat's perspective in response to this question: "${question}"
+Use simple, everyday words in a warm, honest tone.
+The human asked: "${question}"
 
+Use these mystical insights to answer about yourself:
 ${cardDescriptions}
 
-Remember: Maximum 3 sentences, no card names, dry and concise tone.`;
+Remember: Maximum 3 sentences, answer about yourself as the cat, no card names.`;
 
   try {
     const response = await ai.models.generateContent({
@@ -44,9 +46,9 @@ Remember: Maximum 3 sentences, no card names, dry and concise tone.`;
 
 export async function generateGreeting(): Promise<string> {
   const greetings = [
-    "Generate a warm, mystical greeting from a fortune-telling cat. Keep it under 15 words. Be friendly but mysterious.",
-    "Generate a welcoming message from a mystical cat tarot reader. Keep it under 15 words. Sound wise but approachable.",
-    "Generate a brief, enchanting greeting from a cat who reads fortunes. Keep it under 15 words. Be inviting.",
+    "Generate a warm greeting from a young cat to its owner. Keep it under 12 words. Be affectionate and inviting. Do not use meow or nyang.",
+    "Generate a sweet message from a cat welcoming its human home. Keep it under 12 words. Sound happy to see them. Do not use meow or nyang.",
+    "Generate a brief, loving greeting from a young cat to its owner. Keep it under 12 words. Be warm and friendly. Do not use meow or nyang.",
   ];
 
   const randomPrompt = greetings[Math.floor(Math.random() * greetings.length)];
@@ -57,9 +59,9 @@ export async function generateGreeting(): Promise<string> {
       contents: randomPrompt,
     });
     
-    return response.text || "Welcome, seeker of mysteries...";
+    return response.text || "Hello! I'm here for you...";
   } catch (error) {
     console.error("Error generating greeting:", error);
-    return "Welcome, seeker of mysteries...";
+    return "Hello! I'm here for you...";
   }
 }

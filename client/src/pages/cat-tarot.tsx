@@ -211,10 +211,10 @@ export default function CatTarotPage() {
         <div className="flex-1 relative">
           {gameState === "initial" && (
             <div
-              className="absolute transition-all duration-1000 ease-out"
+              className="absolute transition-all duration-1000 ease-out px-4"
               style={{
                 top: "50%",
-                left: "45%",
+                left: "50%",
                 transform: "translate(-50%, -50%)",
               }}
             >

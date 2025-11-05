@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cat Tarot is an interactive tarot reading web application where users receive mystical guidance from a cat's perspective. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated interpretations delivered in a friendly feline voice. The application features a mystical talking cat with personalized greetings, custom cat photo upload capability, overlapping card spread layout, prominent card selection counter, loading indicators, and smooth animations for an engaging user experience.
+Cat Tarot is an interactive web application where users can ask questions about their cat and receive answers from their cat's perspective using tarot card insights. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated responses where the cat speaks directly to its owner. Users ask questions ABOUT their cat (health, feelings, wants, needs), and the young cat responds honestly about itself. The application features a talking cat interface with personalized greetings, custom cat photo upload capability, overlapping card spread layout, prominent card selection counter, loading indicators, and smooth animations for an engaging user experience.
 
 ## User Preferences
 
@@ -19,6 +19,9 @@ Preferred communication style: Simple, everyday language.
 - Auto-prompts for photo upload on first visit
 - Fixed SSR bug by guarding all window access in useEffect with viewport state
 - Fixed z-index ordering: Modal (200) > Loading (150) > Selected cards (100)
+- Fixed mobile responsive issues: Cat image increased to 140px with flex-shrink-0, speech bubble reduced to max-w-[200px] on mobile
+- Fixed card spread positioning: Changed from left: 45% to left: 50% with padding for proper mobile centering
+- **Major context change**: AI now speaks AS the user's young cat responding to questions ABOUT itself (health, feelings, wants), not as a fortune-teller
 
 **Previous Session**
 - Implemented talking cat feature with AI-generated greetings via Gemini
@@ -101,9 +104,10 @@ Preferred communication style: Simple, everyday language.
 - Google Generative AI (Gemini 2.5 Flash model via Replit AI Integrations)
 - API key configured via environment variable: `AI_INTEGRATIONS_GEMINI_API_KEY`
 - Two AI functions:
-  1. `generateTarotReading()` - Interprets cards with cat persona (max 3 sentences, dry tone, no card names)
-  2. `generateGreeting()` - Creates personalized welcome messages that change on each page load
-- Prompt engineering ensures mystical, friendly, and concise responses
+  1. `generateTarotReading()` - Cat responds from its own perspective about itself (health, feelings, wants) using tarot insights (max 3 sentences, warm honest tone, no card names)
+  2. `generateGreeting()` - Creates warm, affectionate greetings from the cat to its owner
+- Context: User asks questions ABOUT their cat, and the cat answers about itself
+- Prompt engineering ensures the cat speaks as itself, not as a fortune-teller
 
 **Database**
 - Drizzle ORM configured with PostgreSQL dialect
