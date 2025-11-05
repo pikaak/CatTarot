@@ -41,3 +41,25 @@ Remember: Maximum 3 sentences, no card names, dry and concise tone.`;
     throw new Error("Failed to generate reading");
   }
 }
+
+export async function generateGreeting(): Promise<string> {
+  const greetings = [
+    "Generate a warm, mystical greeting from a fortune-telling cat. Keep it under 15 words. Be friendly but mysterious.",
+    "Generate a welcoming message from a mystical cat tarot reader. Keep it under 15 words. Sound wise but approachable.",
+    "Generate a brief, enchanting greeting from a cat who reads fortunes. Keep it under 15 words. Be inviting.",
+  ];
+
+  const randomPrompt = greetings[Math.floor(Math.random() * greetings.length)];
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: randomPrompt,
+    });
+    
+    return response.text || "Welcome, seeker of mysteries...";
+  } catch (error) {
+    console.error("Error generating greeting:", error);
+    return "Welcome, seeker of mysteries...";
+  }
+}

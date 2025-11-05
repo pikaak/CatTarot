@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ALL_CARDS, type TarotCard as TarotCardType } from "@shared/cards";
 import Header from "@/components/Header";
-import CardStack from "@/components/CardStack";
+import TalkingCat from "@/components/TalkingCat";
 import TarotCard from "@/components/TarotCard";
 import QuestionInput from "@/components/QuestionInput";
 import ResultModal from "@/components/ResultModal";
@@ -170,11 +170,12 @@ export default function CatTarotPage() {
             <div
               className="absolute transition-all duration-1000 ease-out"
               style={{
-                bottom: "140px",
-                left: "2rem",
+                top: "50%",
+                left: "45%",
+                transform: "translate(-50%, -50%)",
               }}
             >
-              <CardStack onClick={handleCardStackClick} />
+              <TalkingCat onClick={handleCardStackClick} />
             </div>
           )}
 

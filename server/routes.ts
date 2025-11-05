@@ -1,9 +1,19 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { tarotReadingRequestSchema } from "@shared/schema";
-import { generateTarotReading } from "./lib/gemini";
+import { generateTarotReading, generateGreeting } from "./lib/gemini";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.get("/api/greeting", async (req, res) => {
+    try {
+      const greeting = await generateGreeting();
+      res.json(greeting);
+    } catch (error) {
+      console.error("Error in /api/greeting:", error);
+      res.status(500).json({ error: "Failed to generate greeting" });
+    }
+  });
+
   app.post("/api/tarot/reading", async (req, res) => {
     try {
       const validatedData = tarotReadingRequestSchema.parse(req.body);

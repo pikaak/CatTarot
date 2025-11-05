@@ -37,8 +37,9 @@ Preferred communication style: Simple, everyday language.
 
 **Component Architecture**
 - Atomic design pattern with reusable UI components in `/components/ui`
-- Feature components: CardStack, TarotCard, QuestionInput, ResultModal, Header
+- Feature components: TalkingCat, TarotCard, QuestionInput, ResultModal, Header
 - Each component is self-contained with props-based configuration
+- TalkingCat component features AI-generated greetings, animated cat image, and speech bubble UI
 - Example components provided for development/testing purposes
 
 ### Backend Architecture
@@ -49,7 +50,9 @@ Preferred communication style: Simple, everyday language.
 - Custom Vite integration for development with middleware mode
 
 **API Design**
-- RESTful endpoint: POST `/api/tarot/reading`
+- RESTful endpoints:
+  - POST `/api/tarot/reading` - Generate tarot reading
+  - GET `/api/greeting` - Generate personalized AI greeting
 - Request validation using Zod schemas
 - Shared schema definitions between client and server (`@shared/schema.ts`)
 
@@ -72,10 +75,12 @@ Preferred communication style: Simple, everyday language.
 ### External Dependencies
 
 **AI Integration**
-- Google Generative AI (Gemini 2.0 Flash Exp model)
+- Google Generative AI (Gemini 2.5 Flash model via Replit AI Integrations)
 - API key configured via environment variable: `AI_INTEGRATIONS_GEMINI_API_KEY`
-- Prompt engineering ensures cat persona: friendly tone, no card names revealed, max 3 sentences
-- Model interprets card keywords rather than card titles for mystical ambiguity
+- Two AI functions:
+  1. `generateTarotReading()` - Interprets cards with cat persona (max 3 sentences, dry tone, no card names)
+  2. `generateGreeting()` - Creates personalized welcome messages that change on each page load
+- Prompt engineering ensures mystical, friendly, and concise responses
 
 **Database**
 - Drizzle ORM configured with PostgreSQL dialect
@@ -95,6 +100,8 @@ Preferred communication style: Simple, everyday language.
 
 **Asset Management**
 - Tarot card images stored in `/attached_assets/generated_images/`
+- Stock images stored in `/attached_assets/stock_images/`
+- Cat image for TalkingCat component: `friendly_orange_tabb_b7c12b4c.jpg`
 - Vite alias `@assets` for clean imports
 - Images are imported as modules and bundled by Vite
 - All card backs share the same image: `Mystical_tarot_card_back_8388aaca.png`
