@@ -116,27 +116,8 @@ export default function CatTarotPage() {
     readingMutation.reset();
   };
 
-  const getCardPosition = (index: number, total: number) => {
-    if (gameState === "initial" || gameState === "shuffling") {
-      return { x: 0, y: 0, rotation: 0 };
-    }
-
-    // Grid layout for all 78 cards
-    const cardsPerRow = 13;
-    const row = Math.floor(index / cardsPerRow);
-    const col = index % cardsPerRow;
-    
-    const cardWidth = 80;
-    const cardHeight = 120;
-    const horizontalSpacing = cardWidth + 10;
-    const verticalSpacing = cardHeight + 10;
-
-    const x = col * horizontalSpacing;
-    const y = row * verticalSpacing;
-    const rotation = (Math.random() - 0.5) * 8; // Slight random rotation
-
-    return { x, y, rotation };
-  };
+  // No longer need getCardPosition for grid layout
+  const getRandomRotation = () => (Math.random() - 0.5) * 8;
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -158,12 +139,17 @@ export default function CatTarotPage() {
 
           {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
             <div
-              className="absolute inset-0 overflow-y-auto overflow-x-hidden pt-4 pb-32"
+              className="absolute inset-0 overflow-y-auto overflow-x-hidden pt-4 pb-32 px-2"
               data-testid="card-spread-container"
             >
-              <div className="relative min-h-full" style={{ width: '1200px', margin: '0 auto', minHeight: '800px' }}>
+              <div 
+                className="grid gap-2 sm:gap-3 mx-auto max-w-6xl pb-4"
+                style={{ 
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 80px))',
+                  justifyContent: 'center'
+                }}
+              >
                 {shuffledCards.map((card, index) => {
-                  const pos = getCardPosition(index, shuffledCards.length);
                   const isSelected = selectedCards.find(c => c.id === card.id);
                   const isFlipped = flippedCardIds.includes(card.id);
 
@@ -171,34 +157,53 @@ export default function CatTarotPage() {
                   const getSelectedPosition = () => {
                     if (selectedIndex === -1) return null;
                     const isMobile = window.innerWidth < 768;
-                    const positions = isMobile ? [
-                      { top: '10px', left: '50%', translateX: '-120px', scale: 1.2 },
-                      { top: '10px', left: '50%', translateX: '0px', scale: 1.2 },
-                      { top: '10px', left: '50%', translateX: '120px', scale: 1.2 }
-                    ] : [
-                      { top: '20px', left: '50%', translateX: '-200px', scale: 1.8 },
-                      { top: '20px', left: '50%', translateX: '0px', scale: 1.8 },
-                      { top: '20px', left: '50%', translateX: '200px', scale: 1.8 }
-                    ];
-                    return positions[selectedIndex];
+                    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+                    
+                    if (isMobile) {
+                      // Mobile: smaller scale, positioned to stay in viewport
+                      const positions = [
+                        { top: '100px', left: '50%', translateX: '-65px', scale: 1.15 },
+                        { top: '100px', left: '50%', translateX: '0px', scale: 1.15 },
+                        { top: '100px', left: '50%', translateX: '65px', scale: 1.15 }
+                      ];
+                      return positions[selectedIndex];
+                    } else if (isTablet) {
+                      // Tablet: medium scale
+                      const positions = [
+                        { top: '80px', left: '50%', translateX: '-150px', scale: 1.5 },
+                        { top: '80px', left: '50%', translateX: '0px', scale: 1.5 },
+                        { top: '80px', left: '50%', translateX: '150px', scale: 1.5 }
+                      ];
+                      return positions[selectedIndex];
+                    } else {
+                      // Desktop: full scale
+                      const positions = [
+                        { top: '20px', left: '50%', translateX: '-200px', scale: 1.8 },
+                        { top: '20px', left: '50%', translateX: '0px', scale: 1.8 },
+                        { top: '20px', left: '50%', translateX: '200px', scale: 1.8 }
+                      ];
+                      return positions[selectedIndex];
+                    }
                   };
                   const selectedPos = getSelectedPosition();
 
+                  const cardStyle: React.CSSProperties = isSelected ? {
+                    position: 'fixed' as const,
+                    transform: `translateX(${selectedPos?.translateX}) scale(${selectedPos?.scale})`,
+                    left: selectedPos?.left,
+                    top: selectedPos?.top,
+                    zIndex: 10,
+                    transition: 'all 0.7s ease-out',
+                  } : {
+                    transform: `rotate(${getRandomRotation()}deg)`,
+                    transition: 'all 0.7s ease-out',
+                  };
+
                   return (
-                    <div
+                    <div 
                       key={card.id}
-                      className="absolute transition-all duration-700 ease-out"
-                      style={{
-                        transform: isSelected 
-                          ? `translate(calc(${selectedPos?.translateX}), 0) scale(${selectedPos?.scale})` 
-                          : `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg)`,
-                        left: isSelected ? selectedPos?.left : '0',
-                        top: isSelected ? selectedPos?.top : '0',
-                        opacity: 1,
-                        zIndex: isSelected ? 10 : 1,
-                        position: isSelected ? 'fixed' : 'absolute',
-                      }}
                       data-testid={`spread-card-${index}`}
+                      style={cardStyle}
                     >
                       <TarotCard
                         card={card}
@@ -233,7 +238,6 @@ export default function CatTarotPage() {
           <QuestionInput
             value={question}
             onChange={setQuestion}
-            onSubmit={handleCardStackClick}
             disabled={gameState !== "initial"}
           />
         </div>
