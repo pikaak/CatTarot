@@ -10,7 +10,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-**November 5, 2025 (Latest Session)**
+**November 5, 2025 (Latest Session - Bug Fixes)**
+- **Fixed Greeting API**: Changed queryKey format to use custom queryFn, fixing issue where AI greetings weren't displaying (was showing only "냥!" fallback)
+- **Fixed Card Spread Positioning**: Corrected mobile layout regression where cards shifted right - now properly centered with responsive padding
+- **Fixed ResultModal Overflow**: Added max-h-[90vh] with overflow-y-auto to prevent Done button from being cut off on mobile
+- Reduced mobile padding in ResultModal from p-8 to p-6 for better space utilization
+
+**November 5, 2025 (Earlier - Feature Updates)**
 - **Editable Cat Names**: Added pencil icon button next to cat name (appears on hover) to edit name and photo
 - **Updated Branding**: Changed app title from "내 고양이 타로 번역기" to "냥이 타로 번역기"
 - **Updated Default Greeting**: Changed from "신비로운 여정을 시작하세요..." to "냥!"
