@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ALL_CARDS, type TarotCard as TarotCardType } from "@shared/cards";
 import Header from "@/components/Header";
 import TalkingCat from "@/components/TalkingCat";
@@ -28,7 +28,19 @@ export default function CatTarotPage() {
   const [flippedCardIds, setFlippedCardIds] = useState<number[]>([]);
   const [reading, setReading] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [viewport, setViewport] = useState({ width: 1920, height: 1080 });
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const updateViewport = () => {
+        setViewport({ width: window.innerWidth, height: window.innerHeight });
+      };
+      updateViewport();
+      window.addEventListener('resize', updateViewport);
+      return () => window.removeEventListener('resize', updateViewport);
+    }
+  }, []);
 
   const readingMutation = useMutation<TarotReadingResponse, Error, TarotReadingRequest>({
     mutationFn: async (data) => {
@@ -122,9 +134,9 @@ export default function CatTarotPage() {
     }
 
     // Overlapping spread layout - fits all cards without scrolling
-    const isMobile = window.innerWidth < 768;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    const isMobile = viewport.width < 768;
+    const viewportWidth = viewport.width;
+    const viewportHeight = viewport.height;
     
     // Card dimensions
     const cardWidth = isMobile ? 60 : 70;
@@ -193,8 +205,8 @@ export default function CatTarotPage() {
                   const selectedIndex = selectedCards.findIndex(c => c.id === card.id);
                   
                   // Determine scale based on selection
-                  const isMobile = window.innerWidth < 768;
-                  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+                  const isMobile = viewport.width < 768;
+                  const isTablet = viewport.width >= 768 && viewport.width < 1024;
                   
                   let scale = 1;
                   if (isSelected) {

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cat Tarot is an interactive tarot reading web application where users receive mystical guidance from a cat's perspective. The app provides three-card tarot readings using the Major Arcana, with AI-generated interpretations delivered in a friendly feline voice. The application features a mystical, card game-inspired aesthetic with smooth animations and an engaging user experience.
+Cat Tarot is an interactive tarot reading web application where users receive mystical guidance from a cat's perspective. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated interpretations delivered in a friendly feline voice. The application features a mystical talking cat with personalized greetings, overlapping card spread layout, and smooth animations for an engaging user experience.
 
 ## User Preferences
 
@@ -40,7 +40,8 @@ Preferred communication style: Simple, everyday language.
 - Feature components: TalkingCat, TarotCard, QuestionInput, ResultModal, Header
 - Each component is self-contained with props-based configuration
 - TalkingCat component features AI-generated greetings, animated cat image, and speech bubble UI
-- Example components provided for development/testing purposes
+- Selected cards enlarge in place (scale up) without moving from their spread position
+- Modal uses z-index 200 to float above selected cards (z-index 100)
 
 ### Backend Architecture
 
