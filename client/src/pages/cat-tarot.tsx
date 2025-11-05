@@ -292,7 +292,7 @@ export default function CatTarotPage() {
             <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
               <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
                 <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
-                  고양이가 우주의 힘을 상담하고 있어요...
+                  고양이어 번역 중
                 </div>
                 <div className="flex justify-center gap-2">
                   <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>

@@ -90,7 +90,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-sm text-muted-foreground">고양이의 생각</div>
+          <div className="text-sm text-muted-foreground">번역 완료!</div>
         </div>
 
         <div className="relative min-h-[120px]">
