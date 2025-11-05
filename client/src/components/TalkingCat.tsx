@@ -4,12 +4,11 @@ import catImage from "@assets/stock_images/friendly_orange_tabb_b7c12b4c.jpg";
 import { Camera } from "lucide-react";
 
 interface TalkingCatProps {
-  onClick: () => void;
   customImage?: string;
   onPhotoClick?: () => void;
 }
 
-export default function TalkingCat({ onClick, customImage, onPhotoClick }: TalkingCatProps) {
+export default function TalkingCat({ customImage, onPhotoClick }: TalkingCatProps) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const { data: greeting } = useQuery<string>({
@@ -39,8 +38,7 @@ export default function TalkingCat({ onClick, customImage, onPhotoClick }: Talki
 
   return (
     <div 
-      className="flex items-center gap-4 cursor-pointer group"
-      onClick={onClick}
+      className="flex items-center gap-4 group"
       data-testid="talking-cat"
     >
       <div 
@@ -69,7 +67,7 @@ export default function TalkingCat({ onClick, customImage, onPhotoClick }: Talki
       </div>
 
       <div 
-        className="relative bg-card border-2 border-primary/30 rounded-2xl px-6 py-4 shadow-xl max-w-md transition-all duration-300 group-hover:scale-105"
+        className="relative bg-card border-2 border-primary/30 rounded-2xl px-6 py-4 shadow-xl max-w-md"
         data-testid="speech-bubble"
       >
         <div 

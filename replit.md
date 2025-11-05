@@ -2,11 +2,29 @@
 
 ## Overview
 
-Cat Tarot is an interactive tarot reading web application where users receive mystical guidance from a cat's perspective. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated interpretations delivered in a friendly feline voice. The application features a mystical talking cat with personalized greetings, overlapping card spread layout, and smooth animations for an engaging user experience.
+Cat Tarot is an interactive tarot reading web application where users receive mystical guidance from a cat's perspective. The app provides three-card tarot readings using a full 78-card deck (22 Major Arcana + 56 Minor Arcana), with AI-generated interpretations delivered in a friendly feline voice. The application features a mystical talking cat with personalized greetings, custom cat photo upload capability, overlapping card spread layout, prominent card selection counter, loading indicators, and smooth animations for an engaging user experience.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Recent Changes
+
+**November 5, 2025**
+- Added custom cat photo upload feature with localStorage persistence
+- Changed interaction flow: Arrow button in input triggers shuffle (not clicking talking cat)
+- Added prominent card selection counter at top of screen ("Select 3 cards", "Select 2 more cards", etc.)
+- Implemented full-screen loading overlay with animation while AI generates reading (z-150, above selected cards)
+- TalkingCat now shows camera icon placeholder when no photo uploaded
+- Auto-prompts for photo upload on first visit
+- Fixed SSR bug by guarding all window access in useEffect with viewport state
+- Fixed z-index ordering: Modal (200) > Loading (150) > Selected cards (100)
+
+**Previous Session**
+- Implemented talking cat feature with AI-generated greetings via Gemini
+- Redesigned card spread to use overlapping layout (60% overlap)
+- Fixed selected card behavior to enlarge in place using scale transforms
+- Increased modal z-index from 50 to 200 to float above selected cards
 
 ## System Architecture
 
@@ -37,9 +55,13 @@ Preferred communication style: Simple, everyday language.
 
 **Component Architecture**
 - Atomic design pattern with reusable UI components in `/components/ui`
-- Feature components: TalkingCat, TarotCard, QuestionInput, ResultModal, Header
+- Feature components: TalkingCat, CatPhotoUpload, TarotCard, QuestionInput, ResultModal, Header
 - Each component is self-contained with props-based configuration
-- TalkingCat component features AI-generated greetings, animated cat image, and speech bubble UI
+- TalkingCat component features AI-generated greetings, custom/placeholder cat image, and speech bubble UI
+- CatPhotoUpload component manages custom cat photo with localStorage persistence and preview
+- QuestionInput includes arrow button to start reading (replaces clicking on talking cat)
+- Prominent card selection counter appears at top of screen showing remaining cards to select
+- Full-screen loading overlay displays while AI generates reading
 - Selected cards enlarge in place (scale up) without moving from their spread position
 - Modal uses z-index 200 to float above selected cards (z-index 100)
 

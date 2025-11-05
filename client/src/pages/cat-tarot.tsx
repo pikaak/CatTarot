@@ -219,7 +219,6 @@ export default function CatTarotPage() {
               }}
             >
               <TalkingCat 
-                onClick={handleCardStackClick} 
                 customImage={catPhoto}
                 onPhotoClick={handlePhotoClick}
               />
@@ -279,18 +278,27 @@ export default function CatTarotPage() {
             </div>
           )}
 
-          {gameState === "selecting" && selectedCards.length < 3 && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-32 text-center">
-              <div className="text-lg font-serif text-foreground bg-card/90 backdrop-blur-sm px-6 py-3 rounded-lg shadow-lg border border-border">
-                Select {3 - selectedCards.length} card{3 - selectedCards.length !== 1 ? 's' : ''} to reveal your fortune
+          {gameState === "selecting" && (
+            <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+              <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
+                {selectedCards.length === 0 && "Select 3 cards to reveal your fortune"}
+                {selectedCards.length === 1 && "Select 2 more cards"}
+                {selectedCards.length === 2 && "Select 1 more card"}
               </div>
             </div>
           )}
 
           {readingMutation.isPending && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-              <div className="text-lg font-serif text-foreground animate-pulse">
-                Your cat is consulting the cosmic forces...
+            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
+              <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
+                <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
+                  Your cat is consulting the cosmic forces...
+                </div>
+                <div className="flex justify-center gap-2">
+                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
               </div>
             </div>
           )}
@@ -300,6 +308,7 @@ export default function CatTarotPage() {
           <QuestionInput
             value={question}
             onChange={setQuestion}
+            onSubmit={handleCardStackClick}
             disabled={gameState !== "initial"}
           />
         </div>
