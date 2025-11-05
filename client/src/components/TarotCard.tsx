@@ -61,14 +61,14 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
       data-testid={`card-${card.id}`}
     >
       <div
-        className={`relative w-full h-full transition-transform duration-600 ease-in-out`}
+        className={`relative w-full h-full transition-transform duration-600 ease-in-out pointer-events-none`}
         style={{
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
         <div
-          className="absolute inset-0 rounded-md shadow-lg"
+          className="absolute inset-0 rounded-md shadow-lg pointer-events-none"
           style={{
             backfaceVisibility: "hidden",
           }}
@@ -80,7 +80,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
           />
         </div>
         <div
-          className="absolute inset-0 rounded-md shadow-lg"
+          className="absolute inset-0 rounded-md shadow-lg pointer-events-none"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",

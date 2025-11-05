@@ -8,7 +8,7 @@ import QuestionInput from "@/components/QuestionInput";
 import ResultModal from "@/components/ResultModal";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 type GameState = "initial" | "shuffling" | "spread" | "selecting" | "reading";
 
@@ -55,10 +55,16 @@ export default function CatTarotPage() {
     if (typeof window !== 'undefined') {
       const savedPhoto = localStorage.getItem(CAT_PHOTO_KEY);
       const savedName = localStorage.getItem(CAT_NAME_KEY);
-      if (savedPhoto && savedName) {
+      
+      if (savedPhoto) {
         setCatPhoto(savedPhoto);
+      }
+      if (savedName) {
         setCatName(savedName);
-      } else {
+      }
+      
+      // Show upload modal if either is missing
+      if (!savedPhoto || !savedName) {
         setShowPhotoUpload(true);
       }
     }
@@ -157,7 +163,8 @@ export default function CatTarotPage() {
     if (typeof window !== 'undefined') {
       const hasCompleted = localStorage.getItem(READING_COMPLETED_KEY);
       if (hasCompleted === 'true') {
-        setGreetingKey(prev => prev + 1);
+        // Invalidate the greeting query to force a new fetch
+        queryClient.invalidateQueries({ queryKey: ['/api/greeting'] });
       }
     }
   };
