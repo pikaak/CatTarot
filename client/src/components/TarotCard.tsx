@@ -52,7 +52,7 @@ export default function TarotCard({ card, isFlipped, onClick, className = "", st
 
   return (
     <div
-      className={`relative w-24 h-36 md:w-32 md:h-48 cursor-pointer transition-transform duration-200 ${className}`}
+      className={`relative w-[50px] h-[75px] md:w-[60px] md:h-[90px] cursor-pointer transition-transform duration-200 ${className}`}
       style={{
         perspective: "1000px",
         ...style,

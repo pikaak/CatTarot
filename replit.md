@@ -10,7 +10,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-**November 5, 2025 (Latest Session - Animations & Layout Improvements)**
+**November 6, 2025 (Latest Session - Sharing & UX Enhancements)**
+- **SNS Sharing Buttons**: Added social sharing functionality in ResultModal with native Web Share API, X (Twitter) sharing, and clipboard fallback with toast notifications
+- **Typing Animation**: Implemented character-by-character typing effect for result text (30ms per character) with blinking cursor indicator for enhanced reading experience
+- **Reduced Card Spread Size**: Decreased card dimensions (mobile: 50x75, desktop: 60x90) to prevent overlap with question input field and improve vertical spacing
+- Share buttons appear next to 완료 button on final page with responsive flex layout (vertical on mobile, horizontal on desktop)
+
+**November 5, 2025 (Earlier - Animations & Layout Improvements)**
 - **Talking Cat Animation**: Added gentle grow/shrink animation to main screen cat image using custom CSS keyframes for more engaging interaction
 - **Responsive Speech Bubble**: Repositioned speech bubble below cat image on mobile (vertical layout) while keeping it beside cat on desktop (horizontal layout) with responsive arrow pointers
 - **Fixed Card Spread Positioning (Again)**: Adjusted mobile padding to 10px and improved centering calculation to prevent cards from shifting right on narrow screens
@@ -105,11 +111,18 @@ Preferred communication style: Simple, everyday language.
 - TarotCard component:
   - All child elements use pointer-events-none for reliable click handling
   - Only outermost div receives click events
+  - Card dimensions: 50px × 75px (mobile), 60px × 90px (desktop) using Tailwind arbitrary values
 - QuestionInput includes arrow button to start reading (replaces clicking on talking cat)
 - Prominent card selection counter appears at top of screen showing remaining cards to select
 - Full-screen loading overlay displays while AI generates reading (Korean: "고양이어 번역 중")
 - Selected cards enlarge in place (scale up) without moving from their spread position
 - Modal uses z-index 200 to float above selected cards (z-index 100)
+- ResultModal features:
+  - Typing animation effect for result text (30ms per character) with blinking cursor
+  - Social sharing buttons (generic share via Web Share API, X/Twitter intent)
+  - Clipboard fallback with success/error toast notifications
+  - Responsive button layout (flex-col on mobile, flex-row on desktop)
+  - Proper error handling for share failures
 
 ### Backend Architecture
 
