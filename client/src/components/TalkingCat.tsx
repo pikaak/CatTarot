@@ -72,7 +72,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
       )}
       <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 group">
         <div 
-          className="relative transition-all duration-500 cursor-pointer flex-shrink-0 animate-[pulse_3s_ease-in-out_infinite]"
+          className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
           style={{ 
             width: "140px", 
             height: "140px",

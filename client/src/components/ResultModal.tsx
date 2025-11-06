@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, X, Share2 } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { ChevronRight, X } from "lucide-react";
+import { SiX, SiInstagram } from "react-icons/si";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import type { TarotCard } from "@shared/cards";
@@ -51,30 +51,20 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
     }
   };
 
-  const handleShare = async () => {
-    const shareText = `냥이 타로 번역기 🐱✨\n\n${reading}\n\n나도 우리 고양이에게 물어봐!`;
-    const shareUrl = window.location.href;
-
-    // Try native Web Share API first
-    if (navigator.share) {
+  const handleXShare = async () => {
+    const text = `냥이 타로 번역기 🐱✨\n\n${reading.slice(0, 200)}${reading.length > 200 ? "..." : ""}`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+    
+    // Try to open Twitter share window
+    const popup = window.open(tweetUrl, "_blank", "width=550,height=420");
+    
+    // If popup was blocked, fallback to clipboard
+    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
       try {
-        await navigator.share({
-          title: "냥이 타로 번역기",
-          text: shareText,
-          url: shareUrl,
-        });
-      } catch (error) {
-        if ((error as Error).name !== "AbortError") {
-          console.error("Share failed:", error);
-        }
-      }
-    } else {
-      // Fallback: copy to clipboard
-      try {
-        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        await navigator.clipboard.writeText(`${text}\n${window.location.href}`);
         toast({
           title: "복사됨!",
-          description: "클립보드에 복사되었습니다. 원하는 곳에 붙여넣기 하세요!",
+          description: "X에 붙여넣기 하세요!",
         });
       } catch (error) {
         console.error("Copy failed:", error);
@@ -87,10 +77,23 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
     }
   };
 
-  const handleXShare = () => {
-    const text = `냥이 타로 번역기 🐱✨\n\n${reading.slice(0, 200)}${reading.length > 200 ? "..." : ""}`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
-    window.open(url, "_blank", "width=550,height=420");
+  const handleInstagramShare = async () => {
+    // Instagram doesn't have a direct web share URL, so we'll copy to clipboard
+    const shareText = `냥이 타로 번역기 🐱✨\n\n${reading}\n\n나도 우리 고양이에게 물어봐!\n${window.location.href}`;
+    try {
+      await navigator.clipboard.writeText(shareText);
+      toast({
+        title: "복사됨!",
+        description: "인스타그램에 붙여넣기 하세요!",
+      });
+    } catch (error) {
+      console.error("Copy failed:", error);
+      toast({
+        title: "공유 실패",
+        description: "클립보드 복사에 실패했습니다.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleClose = () => {
@@ -184,27 +187,25 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         )}
 
         {currentPage === totalPages - 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6 mb-2">
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleShare}
-                data-testid="button-share"
-                title="공유하기"
-              >
-                <Share2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleXShare}
-                data-testid="button-share-x"
-                title="X에 공유"
-              >
-                <SiX className="h-4 w-4" />
-              </Button>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6 mb-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleXShare}
+              data-testid="button-share-x"
+              title="X에 공유"
+            >
+              <SiX className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleInstagramShare}
+              data-testid="button-share-instagram"
+              title="인스타그램에 공유"
+            >
+              <SiInstagram className="h-4 w-4" />
+            </Button>
             <Button onClick={handleClose} data-testid="button-done">
               완료
             </Button>
