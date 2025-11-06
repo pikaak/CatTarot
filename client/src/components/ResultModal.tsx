@@ -200,6 +200,14 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
               className="w-full h-full object-cover"
             />
           </div>
+          <div className="text-sm text-muted-foreground">
+            {selectedCards.map((card, index) => (
+              <span key={index}>
+                {card.name}
+                {index < selectedCards.length - 1 && " · "}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="relative min-h-[120px]">

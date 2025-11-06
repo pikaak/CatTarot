@@ -1,12 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Using Replit's AI Integrations service for Gemini access
+// DON'T DELETE THIS COMMENT
+// Using Google Gemini API directly via blueprint:javascript_gemini
+// API key from Google AI Studio (not Vertex AI)
 const ai = new GoogleGenAI({
-  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY || "",
-  httpOptions: {
-    apiVersion: "",
-    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL || "",
-  },
+  apiKey: process.env.GEMINI_API_KEY || "",
 });
 
 export async function generateTarotReading(
