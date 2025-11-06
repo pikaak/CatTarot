@@ -10,12 +10,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-**November 5, 2025 (Latest Session - Bug Fixes & Animation)**
-- **Animated Cat Avatar**: Added pulsating animation to fortune teller cat avatar in results modal for more engaging experience
-- **Fixed Greeting API**: Changed queryKey format to use custom queryFn, fixing issue where AI greetings weren't displaying (was showing only "냥!" fallback)
-- **Fixed Card Spread Positioning**: Corrected mobile layout regression where cards shifted right - now properly centered with responsive padding
+**November 5, 2025 (Latest Session - Animations & Layout Improvements)**
+- **Talking Cat Animation**: Added gentle grow/shrink animation to main screen cat image using custom CSS keyframes for more engaging interaction
+- **Responsive Speech Bubble**: Repositioned speech bubble below cat image on mobile (vertical layout) while keeping it beside cat on desktop (horizontal layout) with responsive arrow pointers
+- **Fixed Card Spread Positioning (Again)**: Adjusted mobile padding to 10px and improved centering calculation to prevent cards from shifting right on narrow screens
+- **Animated Result Cat Avatar**: Added pulsating animation to fortune teller cat avatar in results modal
+- **Fixed Greeting API**: Changed queryKey format to use custom queryFn, fixing issue where AI greetings weren't displaying
 - **Fixed ResultModal Overflow**: Added max-h-[90vh] with overflow-y-auto to prevent Done button from being cut off on mobile
-- Reduced mobile padding in ResultModal from p-8 to p-6 for better space utilization
 
 **November 5, 2025 (Earlier - Feature Updates)**
 - **Editable Cat Names**: Added pencil icon button next to cat name (appears on hover) to edit name and photo
@@ -90,10 +91,11 @@ Preferred communication style: Simple, everyday language.
 - Each component is self-contained with props-based configuration
 - TalkingCat component features:
   - AI-generated greetings that refresh after each completed reading
-  - Custom/placeholder cat image display
+  - Custom/placeholder cat image display with gentle grow/shrink animation
   - Cat name display above photo with editable pencil icon (appears on hover)
   - Edit button opens photo upload modal for name/photo changes
-  - Speech bubble UI with dynamic Korean greetings in informal speech (반말)
+  - Responsive speech bubble UI with dynamic Korean greetings in informal speech (반말)
+  - Speech bubble positioned below cat on mobile, beside cat on desktop with appropriate arrow pointers
   - Default greeting: "냥!"
 - CatPhotoUpload component:
   - Cat name input field with validation
