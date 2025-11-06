@@ -196,9 +196,9 @@ export default function CatTarotPage() {
     const viewportWidth = viewport.width;
     const viewportHeight = viewport.height;
     
-    // Card dimensions
-    const cardWidth = isMobile ? 60 : 70;
-    const cardHeight = isMobile ? 90 : 105;
+    // Card dimensions - reduced to prevent overlap with input field
+    const cardWidth = isMobile ? 50 : 60;
+    const cardHeight = isMobile ? 75 : 90;
     
     // Available area (accounting for header and input)
     const headerHeight = 64;

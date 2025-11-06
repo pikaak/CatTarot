@@ -1,7 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, X } from "lucide-react";
-import { useState } from "react";
+import { ChevronRight, X, Share2 } from "lucide-react";
+import { SiX } from "react-icons/si";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import type { TarotCard } from "@shared/cards";
 
 interface ResultModalProps {
@@ -12,17 +14,83 @@ interface ResultModalProps {
 }
 
 export default function ResultModal({ isOpen, onClose, selectedCards, reading }: ResultModalProps) {
+  const { toast } = useToast();
   const [currentPage, setCurrentPage] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   
   const sentences = reading.split(". ").filter(s => s.trim());
   const pageSize = 3;
   const totalPages = Math.ceil(sentences.length / pageSize);
   const currentText = sentences.slice(currentPage * pageSize, (currentPage + 1) * pageSize).join(". ") + (sentences.slice(currentPage * pageSize, (currentPage + 1) * pageSize).length > 0 ? "." : "");
 
+  // Typing animation effect
+  useEffect(() => {
+    if (!currentText) return;
+    
+    setIsTyping(true);
+    setDisplayedText("");
+    
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= currentText.length) {
+        setDisplayedText(currentText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        setIsTyping(false);
+        clearInterval(typingInterval);
+      }
+    }, 30); // 30ms per character for smooth typing
+
+    return () => clearInterval(typingInterval);
+  }, [currentText]);
+
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(prev => prev + 1);
     }
+  };
+
+  const handleShare = async () => {
+    const shareText = `냥이 타로 번역기 🐱✨\n\n${reading}\n\n나도 우리 고양이에게 물어봐!`;
+    const shareUrl = window.location.href;
+
+    // Try native Web Share API first
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "냥이 타로 번역기",
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Share failed:", error);
+        }
+      }
+    } else {
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        toast({
+          title: "복사됨!",
+          description: "클립보드에 복사되었습니다. 원하는 곳에 붙여넣기 하세요!",
+        });
+      } catch (error) {
+        console.error("Copy failed:", error);
+        toast({
+          title: "공유 실패",
+          description: "클립보드 복사에 실패했습니다.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleXShare = () => {
+    const text = `냥이 타로 번역기 🐱✨\n\n${reading.slice(0, 200)}${reading.length > 200 ? "..." : ""}`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, "_blank", "width=550,height=420");
   };
 
   const handleClose = () => {
@@ -98,7 +166,8 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
 
         <div className="relative min-h-[120px]">
           <p className="text-base md:text-lg leading-relaxed text-foreground font-medium opacity-100">
-            {currentText}
+            {displayedText}
+            {isTyping && <span className="animate-pulse">|</span>}
           </p>
         </div>
 
@@ -115,7 +184,27 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         )}
 
         {currentPage === totalPages - 1 && (
-          <div className="flex justify-center mt-6 mb-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6 mb-2">
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleShare}
+                data-testid="button-share"
+                title="공유하기"
+              >
+                <Share2 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleXShare}
+                data-testid="button-share-x"
+                title="X에 공유"
+              >
+                <SiX className="h-4 w-4" />
+              </Button>
+            </div>
             <Button onClick={handleClose} data-testid="button-done">
               완료
             </Button>
