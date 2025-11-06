@@ -70,10 +70,14 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
           )}
         </div>
       )}
-      <div className="flex items-center gap-3 md:gap-4 group">
+      <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 group">
         <div 
-          className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
-          style={{ width: "140px", height: "140px" }}
+          className="relative transition-all duration-500 cursor-pointer flex-shrink-0 animate-[pulse_3s_ease-in-out_infinite]"
+          style={{ 
+            width: "140px", 
+            height: "140px",
+            animation: isAnimating ? 'scale 0.5s ease-in-out' : undefined
+          }}
           onClick={handlePhotoClick}
           data-testid="cat-image-area"
         >
@@ -88,7 +92,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
             <Camera className="w-12 h-12 text-muted-foreground" />
           </div>
         )}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-transparent animate-pulse" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-transparent" />
         {hasCustomImage && (
           <div className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
             <Camera className="w-4 h-4 text-primary-foreground" />
@@ -97,14 +101,20 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
       </div>
 
       <div 
-        className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl max-w-[200px] md:max-w-md flex-1"
+        className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl max-w-[280px] md:max-w-md"
         data-testid="speech-bubble"
       >
         <div 
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[12px] border-r-primary/30"
+          className="absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[12px] border-b-primary/30 md:hidden"
         />
         <div 
-          className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-[2px] w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-card"
+          className="absolute left-1/2 -translate-x-1/2 -top-1 -translate-y-full w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card md:hidden"
+        />
+        <div 
+          className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[12px] border-r-primary/30"
+        />
+        <div 
+          className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 translate-x-[2px] w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-card"
         />
         
           <p className="text-foreground font-serif text-lg italic">

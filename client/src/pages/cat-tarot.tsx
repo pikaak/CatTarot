@@ -203,7 +203,7 @@ export default function CatTarotPage() {
     // Available area (accounting for header and input)
     const headerHeight = 64;
     const inputHeight = 100;
-    const padding = isMobile ? 20 : 40; // Less padding on mobile
+    const padding = isMobile ? 10 : 40; // Minimal padding on mobile
     const availableWidth = viewportWidth - (padding * 2);
     const availableHeight = viewportHeight - headerHeight - inputHeight - 40;
     
@@ -218,11 +218,14 @@ export default function CatTarotPage() {
     const row = Math.floor(index / cols);
     const col = index % cols;
     
-    // Center the spread with proper padding offset
+    // Center the spread - ensure it starts from the padding offset
     const totalWidth = (cols - 1) * horizontalSpacing + cardWidth;
     const totalHeight = (rows - 1) * verticalSpacing + cardHeight;
-    const offsetX = padding + (availableWidth - totalWidth) / 2;
-    const offsetY = (availableHeight - totalHeight) / 2;
+    
+    // Calculate horizontal offset to center the spread
+    const centerOffsetX = Math.max(0, (availableWidth - totalWidth) / 2);
+    const offsetX = padding + centerOffsetX;
+    const offsetY = Math.max(0, (availableHeight - totalHeight) / 2);
     
     const x = offsetX + col * horizontalSpacing;
     const y = offsetY + row * verticalSpacing;
