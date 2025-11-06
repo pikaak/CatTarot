@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight, Share2 } from "lucide-react";
 import { SiX, SiInstagram } from "react-icons/si";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -96,6 +96,42 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
     }
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: "냥이 타로 번역기",
+      text: `냥이 타로 번역기 🐱✨\n\n${reading.slice(0, 200)}${reading.length > 200 ? "..." : ""}`,
+      url: window.location.href,
+    };
+
+    // Try native Web Share API first
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        // User cancelled or error occurred
+        if ((error as Error).name !== "AbortError") {
+          console.error("Share failed:", error);
+        }
+      }
+    } else {
+      // Fallback to clipboard
+      try {
+        await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+        toast({
+          title: "복사됨!",
+          description: "클립보드에 복사되었습니다.",
+        });
+      } catch (error) {
+        console.error("Copy failed:", error);
+        toast({
+          title: "공유 실패",
+          description: "클립보드 복사에 실패했습니다.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   const handleClose = () => {
     setCurrentPage(0);
     onClose();
@@ -156,7 +192,7 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
           ))}
         </div>
 
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-2">
           <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 animate-pulse">
             <img
               src={catAvatarImg}
@@ -164,7 +200,6 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-sm text-muted-foreground">번역 완료!</div>
         </div>
 
         <div className="relative min-h-[120px]">
@@ -187,7 +222,19 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
         )}
 
         {currentPage === totalPages - 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6 mb-2">
+          <div className="flex flex-row items-center justify-center gap-2 mt-3 mb-2">
+            <Button onClick={handleClose} data-testid="button-done">
+              완료
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleShare}
+              data-testid="button-share"
+              title="공유"
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
             <Button
               variant="outline"
               size="icon"
@@ -205,9 +252,6 @@ export default function ResultModal({ isOpen, onClose, selectedCards, reading }:
               title="인스타그램에 공유"
             >
               <SiInstagram className="h-4 w-4" />
-            </Button>
-            <Button onClick={handleClose} data-testid="button-done">
-              완료
             </Button>
           </div>
         )}
