@@ -11,10 +11,15 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 **November 6, 2025 (Latest Session - Sharing & UX Enhancements)**
-- **SNS Sharing Buttons**: Added social sharing functionality in ResultModal with native Web Share API, X (Twitter) sharing, and clipboard fallback with toast notifications
+- **SNS Sharing Buttons**: Added X (Twitter) and Instagram sharing buttons in ResultModal next to 완료 button
+  - X share opens Twitter intent with popup fallback to clipboard copy
+  - Instagram share copies text to clipboard (no web intent available)
+  - Removed generic share button in favor of platform-specific sharing
+  - All buttons in single row with gap-2 spacing (vertical on mobile, horizontal on desktop)
+  - Proper error handling with toast notifications for each platform
 - **Typing Animation**: Implemented character-by-character typing effect for result text (30ms per character) with blinking cursor indicator for enhanced reading experience
 - **Reduced Card Spread Size**: Decreased card dimensions (mobile: 50x75, desktop: 60x90) to prevent overlap with question input field and improve vertical spacing
-- Share buttons appear next to 완료 button on final page with responsive flex layout (vertical on mobile, horizontal on desktop)
+- **Removed Talking Cat Opacity Animation**: Removed pulse animation while keeping grow/shrink scale animation for cleaner visual effect
 
 **November 5, 2025 (Earlier - Animations & Layout Improvements)**
 - **Talking Cat Animation**: Added gentle grow/shrink animation to main screen cat image using custom CSS keyframes for more engaging interaction
@@ -97,7 +102,7 @@ Preferred communication style: Simple, everyday language.
 - Each component is self-contained with props-based configuration
 - TalkingCat component features:
   - AI-generated greetings that refresh after each completed reading
-  - Custom/placeholder cat image display with gentle grow/shrink animation
+  - Custom/placeholder cat image display with gentle grow/shrink scale animation (no opacity changes)
   - Cat name display above photo with editable pencil icon (appears on hover)
   - Edit button opens photo upload modal for name/photo changes
   - Responsive speech bubble UI with dynamic Korean greetings in informal speech (반말)
@@ -119,10 +124,11 @@ Preferred communication style: Simple, everyday language.
 - Modal uses z-index 200 to float above selected cards (z-index 100)
 - ResultModal features:
   - Typing animation effect for result text (30ms per character) with blinking cursor
-  - Social sharing buttons (generic share via Web Share API, X/Twitter intent)
-  - Clipboard fallback with success/error toast notifications
-  - Responsive button layout (flex-col on mobile, flex-row on desktop)
-  - Proper error handling for share failures
+  - Social sharing buttons (X/Twitter and Instagram) positioned next to 완료 button
+  - X share: Opens Twitter intent popup, falls back to clipboard if blocked
+  - Instagram share: Copies text to clipboard with platform-specific toast
+  - All buttons in single row with gap-2 spacing (flex-col on mobile, flex-row on desktop)
+  - Comprehensive error handling with toast notifications for each share method
 
 ### Backend Architecture
 
