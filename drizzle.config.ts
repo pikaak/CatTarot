@@ -1,14 +1,20 @@
+// drizzle.config.ts
 import { defineConfig } from "drizzle-kit";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL, ensure the database is provisioned");
+const url = process.env.DATABASE_URL ?? "";
+
+if (!url) {
+  console.warn(
+    "[drizzle.config] DATABASE_URL not set — running without a database. " +
+      "DB가 필요한 CLI(drizzle-kit push 등)는 URL 설정 전까지 실행되지 않을 수 있습니다."
+  );
 }
 
 export default defineConfig({
-  out: "./migrations",
   schema: "./shared/schema.ts",
+  out: "./drizzle",
   dialect: "postgresql",
-  dbCredentials: {
-    url: process.env.DATABASE_URL,
-  },
+  dbCredentials: { url },
+  verbose: true,
+  strict: true,
 });
