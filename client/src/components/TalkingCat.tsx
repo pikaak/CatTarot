@@ -39,7 +39,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
     };
   }, []);
 
-  const greetingText = typeof greeting === 'string' ? greeting : "냥!";
+  const greetingText = typeof greeting === 'string' ? greeting : "나한테 물어보고 싶은 거 있어?";
 
   const handlePhotoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
