@@ -47,7 +47,7 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif text-center">고양이 사진을 업로드하세요!</DialogTitle>
           <DialogDescription className="sr-only">
-            고양이 이름과 사진을 업로드하여 타로 경험을 개인화하세요
+            고양이 이름과 사진을 업로드하세요
           </DialogDescription>
         </DialogHeader>
 
@@ -98,7 +98,7 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
             </label>
 
             <p className="text-sm text-muted-foreground text-center">
-              고양이 사진을 업로드하여 타로 경험을 개인화하세요
+              고양이 사진을 업로드하세요
             </p>
           </div>
 
