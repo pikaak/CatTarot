@@ -117,7 +117,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
           className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 translate-x-[2px] w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-card"
         />
         
-          <p className="text-foreground font-serif text-base italic">
+          <p className="text-foreground font-serif text-sm italic">
             {greetingText}
           </p>
         </div>
