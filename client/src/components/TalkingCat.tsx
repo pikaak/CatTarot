@@ -101,7 +101,7 @@ export default function TalkingCat({ customImage, catName, onPhotoClick, onNameE
       </div>
 
       <div 
-        className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl max-w-[340px] md:max-w-md"
+        className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl w-[85%] mx-auto md:w-auto md:max-w-md"
         data-testid="speech-bubble"
       >
         <div 
