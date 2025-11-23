@@ -9,6 +9,8 @@ import ResultModal from "@/components/ResultModal";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+// ✅ 카드 뒷면 이미지 프리로드용 import
+import cardBackImg from "@assets/generated_images/Mystical_tarot_card_back_8388aaca.png";
 
 type GameState = "initial" | "shuffling" | "spread" | "selecting" | "reading";
 
@@ -21,9 +23,9 @@ interface TarotReadingResponse {
   reading: string;
 }
 
-const CAT_PHOTO_KEY = 'cat-tarot-custom-photo';
-const CAT_NAME_KEY = 'cat-tarot-cat-name';
-const READING_COMPLETED_KEY = 'cat-tarot-reading-completed';
+const CAT_PHOTO_KEY = "cat-tarot-custom-photo";
+const CAT_NAME_KEY = "cat-tarot-cat-name";
+const READING_COMPLETED_KEY = "cat-tarot-reading-completed";
 
 export default function CatTarotPage() {
   const [gameState, setGameState] = useState<GameState>("initial");
@@ -40,29 +42,31 @@ export default function CatTarotPage() {
   const [viewport, setViewport] = useState({ width: 1920, height: 1080 });
   const { toast } = useToast();
 
+  // ✅ 뷰포트 계산
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const updateViewport = () => {
         setViewport({ width: window.innerWidth, height: window.innerHeight });
       };
       updateViewport();
-      window.addEventListener('resize', updateViewport);
-      return () => window.removeEventListener('resize', updateViewport);
+      window.addEventListener("resize", updateViewport);
+      return () => window.removeEventListener("resize", updateViewport);
     }
   }, []);
 
+  // ✅ 첫 진입 시 로컬스토리지에서 고양이 정보 읽기
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedPhoto = localStorage.getItem(CAT_PHOTO_KEY);
       const savedName = localStorage.getItem(CAT_NAME_KEY);
-      
+
       if (savedPhoto) {
         setCatPhoto(savedPhoto);
       }
       if (savedName) {
         setCatName(savedName);
       }
-      
+
       // Show upload modal if either is missing
       if (!savedPhoto || !savedName) {
         setShowPhotoUpload(true);
@@ -70,7 +74,17 @@ export default function CatTarotPage() {
     }
   }, []);
 
-  const readingMutation = useMutation<TarotReadingResponse, Error, TarotReadingRequest>({
+  // ✅ 스프레딩 전에 카드 뒷면 이미지 프리로드
+  useEffect(() => {
+    const img = new Image();
+    img.src = cardBackImg;
+  }, []);
+
+  const readingMutation = useMutation<
+    TarotReadingResponse,
+    Error,
+    TarotReadingRequest
+  >({
     mutationFn: async (data) => {
       const res = await apiRequest("POST", "/api/tarot/reading", data);
       return await res.json();
@@ -80,12 +94,12 @@ export default function CatTarotPage() {
       setTimeout(() => {
         setShowModal(true);
         // Mark that a reading has been completed
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(READING_COMPLETED_KEY, 'true');
+        if (typeof window !== "undefined") {
+          localStorage.setItem(READING_COMPLETED_KEY, "true");
         }
       }, 800);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "오류",
         description: "리딩 생성에 실패했습니다. 다시 시도해주세요.",
@@ -126,11 +140,11 @@ export default function CatTarotPage() {
 
   const handleCardClick = (card: TarotCardType) => {
     if (gameState !== "selecting") return;
-    if (selectedCards.find(c => c.id === card.id)) return;
+    if (selectedCards.find((c) => c.id === card.id)) return;
     if (selectedCards.length >= 3) return;
 
-    setFlippedCardIds(prev => [...prev, card.id]);
-    
+    setFlippedCardIds((prev) => [...prev, card.id]);
+
     setTimeout(() => {
       const newSelected = [...selectedCards, card];
       setSelectedCards(newSelected);
@@ -145,7 +159,7 @@ export default function CatTarotPage() {
   const generateReading = (cards: TarotCardType[]) => {
     readingMutation.mutate({
       question,
-      cards: cards.map(c => ({ name: c.name, keywords: c.keywords })),
+      cards: cards.map((c) => ({ name: c.name, keywords: c.keywords })),
     });
   };
 
@@ -158,13 +172,13 @@ export default function CatTarotPage() {
     setReading("");
     setShowModal(false);
     readingMutation.reset();
-    
+
     // Refresh greeting if a reading has been completed before
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const hasCompleted = localStorage.getItem(READING_COMPLETED_KEY);
-      if (hasCompleted === 'true') {
+      if (hasCompleted === "true") {
         // Invalidate the greeting query to force a new fetch
-        queryClient.invalidateQueries({ queryKey: ['greeting'] });
+        queryClient.invalidateQueries({ queryKey: ["greeting"] });
       }
     }
   };
@@ -172,7 +186,7 @@ export default function CatTarotPage() {
   const handlePhotoUpload = (imageDataUrl: string, name: string) => {
     setCatPhoto(imageDataUrl);
     setCatName(name);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem(CAT_PHOTO_KEY, imageDataUrl);
       localStorage.setItem(CAT_NAME_KEY, name);
     }
@@ -195,38 +209,46 @@ export default function CatTarotPage() {
     const isMobile = viewport.width < 768;
     const viewportWidth = viewport.width;
     const viewportHeight = viewport.height;
-    
+
     // Card dimensions - reduced to prevent overlap with input field
     const cardWidth = isMobile ? 50 : 60;
     const cardHeight = isMobile ? 75 : 90;
-    
+
     // Available area (accounting for header and input)
     const headerHeight = 64;
     const inputHeight = 100;
     const padding = isMobile ? 10 : 40; // Minimal padding on mobile
-    const availableWidth = viewportWidth - (padding * 2);
+    const availableWidth = viewportWidth - padding * 2;
     const availableHeight = viewportHeight - headerHeight - inputHeight - 40;
-    
+
     // Calculate rows and columns with heavy overlap
-    const cols = Math.ceil(Math.sqrt(total * (availableWidth / availableHeight)));
+    const cols = Math.ceil(
+      Math.sqrt(total * (availableWidth / availableHeight))
+    );
     const rows = Math.ceil(total / cols);
-    
+
     // Spacing with significant overlap
-    const horizontalSpacing = Math.max(cardWidth * 0.4, availableWidth / (cols + 1));
-    const verticalSpacing = Math.max(cardHeight * 0.4, availableHeight / (rows + 1));
-    
+    const horizontalSpacing = Math.max(
+      cardWidth * 0.4,
+      availableWidth / (cols + 1)
+    );
+    const verticalSpacing = Math.max(
+      cardHeight * 0.4,
+      availableHeight / (rows + 1)
+    );
+
     const row = Math.floor(index / cols);
     const col = index % cols;
-    
+
     // Center the spread - ensure it starts from the padding offset
     const totalWidth = (cols - 1) * horizontalSpacing + cardWidth;
     const totalHeight = (rows - 1) * verticalSpacing + cardHeight;
-    
+
     // Calculate horizontal offset to center the spread
     const centerOffsetX = Math.max(0, (availableWidth - totalWidth) / 2);
     const offsetX = padding + centerOffsetX;
     const offsetY = Math.max(0, (availableHeight - totalHeight) / 2);
-    
+
     const x = offsetX + col * horizontalSpacing;
     const y = offsetY + row * verticalSpacing;
     const rotation = (Math.random() - 0.5) * 10;
@@ -249,7 +271,7 @@ export default function CatTarotPage() {
                 transform: "translate(-50%, -50%)",
               }}
             >
-              <TalkingCat 
+              <TalkingCat
                 customImage={catPhoto}
                 catName={catName}
                 onPhotoClick={handlePhotoClick}
@@ -259,7 +281,10 @@ export default function CatTarotPage() {
             </div>
           )}
 
-          {(gameState === "shuffling" || gameState === "spread" || gameState === "selecting" || gameState === "reading") && (
+          {(gameState === "shuffling" ||
+            gameState === "spread" ||
+            gameState === "selecting" ||
+            gameState === "reading") && (
             <div
               className="absolute inset-0 pt-4"
               data-testid="card-spread-container"
@@ -267,15 +292,20 @@ export default function CatTarotPage() {
               <div className="relative w-full h-full">
                 {shuffledCards.map((card, index) => {
                   const pos = getCardPosition(index, shuffledCards.length);
-                  const isSelected = selectedCards.find(c => c.id === card.id);
+                  const isSelected = selectedCards.find(
+                    (c) => c.id === card.id
+                  );
                   const isFlipped = flippedCardIds.includes(card.id);
 
-                  const selectedIndex = selectedCards.findIndex(c => c.id === card.id);
-                  
+                  const selectedIndex = selectedCards.findIndex(
+                    (c) => c.id === card.id
+                  );
+
                   // Determine scale based on selection
                   const isMobile = viewport.width < 768;
-                  const isTablet = viewport.width >= 768 && viewport.width < 1024;
-                  
+                  const isTablet =
+                    viewport.width >= 768 && viewport.width < 1024;
+
                   let scale = 1;
                   if (isSelected) {
                     // Scale up selected cards based on device
@@ -295,7 +325,9 @@ export default function CatTarotPage() {
                       style={{
                         left: `${pos.x}px`,
                         top: `${pos.y}px`,
-                        transform: `rotate(${isSelected ? 0 : pos.rotation}deg) scale(${scale})`,
+                        transform: `rotate(${
+                          isSelected ? 0 : pos.rotation
+                        }deg) scale(${scale})`,
                         zIndex: isSelected ? 100 : 1,
                       }}
                       data-testid={`spread-card-${index}`}
@@ -329,9 +361,18 @@ export default function CatTarotPage() {
                   고양이어 번역 중
                 </div>
                 <div className="flex justify-center gap-2">
-                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-3 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div
+                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: "0ms" }}
+                  ></div>
+                  <div
+                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: "150ms" }}
+                  ></div>
+                  <div
+                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: "300ms" }}
+                  ></div>
                 </div>
               </div>
             </div>
