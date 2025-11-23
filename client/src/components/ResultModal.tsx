@@ -23,7 +23,7 @@ interface ResultModalProps {
 // - 키: "@assets/generated_images/..." 형태 (shared/cards.ts 의 image 값과 동일하게 맞춰야 함)
 // - 값: { default: string } 모듈 (실제 이미지 URL은 default 안에 들어 있음)
 const cardImageModules = import.meta.glob<{ default: string }>(
-  "@assets/generated_images/**/*.{png,jpg,jpeg,webp}",
+  "/src/assets/generated_images/**/*.{png,jpg,jpeg,webp}",
   { eager: true }
 );
 
