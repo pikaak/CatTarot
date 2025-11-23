@@ -20,17 +20,20 @@ interface ResultModalProps {
 }
 
 // ✅ 모든 카드 이미지를 자동으로 수집하는 glob
-// - 키: "@assets/generated_images/..." 형태 (shared/cards.ts 의 image 값과 동일하게 맞춰야 함)
-// - 값: { default: string } 모듈 (실제 이미지 URL은 default 안에 들어 있음)
+//   - 여기서는 "파일 이름" 기준으로 매칭할 거라 경로 alias 차이는 신경 안 써도 됨.
 const cardImageModules = import.meta.glob<{ default: string }>(
-  "/src/assets/generated_images/**/*.{png,jpg,jpeg,webp}",
+  "@assets/generated_images/**/*.{png,jpg,jpeg,webp}",
   { eager: true }
 );
 
-// ✅ 위 glob 결과를 우리가 쓰기 쉬운 Record<string, string>으로 변환
-const cardImages: Record<string, string> = {};
-for (const [key, mod] of Object.entries(cardImageModules)) {
-  cardImages[key] = (mod as { default: string }).default;
+// ✅ 파일 이름 → 이미지 URL 로 매핑
+//   예: "The_Empress_tarot_card_ee0ea80d.png" → "빌드된 실제 URL"
+const cardImagesByFilename: Record<string, string> = {};
+for (const [path, mod] of Object.entries(cardImageModules)) {
+  const filename = path.split("/").pop();
+  if (filename) {
+    cardImagesByFilename[filename] = (mod as { default: string }).default;
+  }
 }
 
 export default function ResultModal({
@@ -200,11 +203,16 @@ export default function ResultModal({
         {/* 선택된 카드들 이미지 */}
         <div className="flex gap-3 md:gap-4 mb-4 md:mb-6 justify-center flex-wrap">
           {selectedCards.map((card, index) => {
-            const fallbackKey =
-              "@assets/generated_images/The_Cat_tarot_card_5842b39d.png";
+            const fallbackFilename =
+              "The_Cat_tarot_card_5842b39d.png";
+
+            const imagePath = card.image as string | undefined;
+            const filename =
+              imagePath?.split("/").pop() ?? fallbackFilename;
 
             const imgSrc =
-              cardImages[card.image] || cardImages[fallbackKey] || undefined;
+              cardImagesByFilename[filename] ||
+              cardImagesByFilename[fallbackFilename];
 
             return (
               <div
@@ -263,7 +271,7 @@ export default function ResultModal({
             onClick={handleNext}
             data-testid="button-next-page"
           >
-            <ChevronRight className="h-5 w-5 animate-pulse" />
+          <ChevronRight className="h-5 w-5 animate-pulse" />
           </Button>
         )}
 
