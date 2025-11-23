@@ -4,12 +4,26 @@ import type { TarotCard } from "@shared/cards";
 import cardBackImg from "@assets/generated_images/Mystical_tarot_card_back_8388aaca.png";
 
 // ✅ 앞면 이미지를 동적으로 import 하기 위한 glob
-//   - 키: "@assets/generated_images/..." 형태의 경로
-//   - 값: 해당 이미지를 import하는 함수 (lazy)
-const cardImageImports = import.meta.glob<{ default: string }>(
+//   - 물리 경로/alias(@assets)와 상관없이 "파일 이름"으로 매칭되도록 map을 만든다.
+const rawImports = import.meta.glob<{ default: string }>(
   "@assets/generated_images/**/*.{png,jpg,jpeg,webp}",
   { eager: false }
 );
+
+// key: 파일 이름 (예: "The_Empress_tarot_card_ee0ea80d.png")
+// value: 해당 이미지를 import하는 함수
+const imageImportByFilename: Record<
+  string,
+  () => Promise<{ default: string }>
+> = {};
+
+for (const [path, importer] of Object.entries(rawImports)) {
+  const filename = path.split("/").pop();
+  if (filename) {
+    imageImportByFilename[filename] =
+      importer as unknown as () => Promise<{ default: string }>;
+  }
+}
 
 interface TarotCardProps {
   card: TarotCard;
@@ -18,8 +32,6 @@ interface TarotCardProps {
   className?: string;
   style?: React.CSSProperties;
 }
-
-// ✅ 더 이상 cardImages 거대한 맵은 필요 없음
 
 export default function TarotCard({
   card,
@@ -49,15 +61,18 @@ export default function TarotCard({
 
     let cancelled = false;
 
-    // 카드 데이터에 들어있는 image 경로가 그대로 glob 의 key 로 쓰이도록 가정
-    const fallbackKey =
-      "@assets/generated_images/The_Cat_tarot_card_5842b39d.png";
-    const key = (card.image as string) || fallbackKey;
+    // cards.ts 의 image 값 예:
+    // "@assets/generated_images/The_Empress_tarot_card_ee0ea80d.png"
+    // → 여기서 파일 이름만 뽑아서 매칭한다.
+    const imagePath = card.image as string | undefined;
+    const filename =
+      imagePath?.split("/").pop() ??
+      "The_Cat_tarot_card_5842b39d.png"; // 안전한 기본값
 
-    const importer = cardImageImports[key];
+    const importer = imageImportByFilename[filename];
 
     if (!importer) {
-      console.warn("[TarotCard] 이미지 import 를 찾지 못했습니다:", key);
+      console.warn("[TarotCard] 이미지 import 를 찾지 못했습니다:", filename);
       return;
     }
 
@@ -68,7 +83,7 @@ export default function TarotCard({
         }
       })
       .catch((err) => {
-        console.error("[TarotCard] 이미지 로딩 실패:", key, err);
+        console.error("[TarotCard] 이미지 로딩 실패:", filename, err);
       });
 
     return () => {
