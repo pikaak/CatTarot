@@ -142,7 +142,7 @@ export default function ResultModal({
       url: window.location.href,
     };
 
-    if (navigator.share) {
+  if (navigator.share) {
       try {
         await navigator.share(shareData);
       } catch (error) {
@@ -186,6 +186,8 @@ export default function ResultModal({
     import.meta.url
   ).href;
 
+  const isThreeCards = selectedCards.length === 3;
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
@@ -201,7 +203,11 @@ export default function ResultModal({
         </DialogHeader>
 
         {/* 선택된 카드들 이미지 */}
-        <div className="flex gap-3 md:gap-4 mb-4 md:mb-6 justify-center flex-wrap">
+        <div
+          className={`mb-4 md:mb-6 flex gap-2 md:gap-4 justify-center ${
+            isThreeCards ? "flex-nowrap" : "flex-wrap"
+          }`}
+        >
           {selectedCards.map((card, index) => {
             const fallbackFilename =
               "The_Cat_tarot_card_5842b39d.png";
@@ -217,7 +223,13 @@ export default function ResultModal({
             return (
               <div
                 key={index}
-                className="w-32 h-48 md:w-40 md:h-60 rounded-md shadow-lg overflow-hidden flex-shrink-0"
+                className={
+                  isThreeCards
+                    ? // ✅ 3장일 때: 항상 가로 한 줄, 화면에 맞게 줄어드는 카드
+                      "aspect-[2/3] w-[22vw] max-w-[90px] md:max-w-[130px] rounded-md shadow-lg overflow-hidden flex-shrink-0 bg-white"
+                    : // ✅ 그 외(1장/2장/기타)는 기존 크기 유지
+                      "w-32 h-48 md:w-40 md:h-60 rounded-md shadow-lg overflow-hidden flex-shrink-0 bg-white"
+                }
               >
                 {imgSrc ? (
                   <img
