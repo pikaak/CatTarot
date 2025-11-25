@@ -116,7 +116,7 @@ export default function TarotCard({
           <img
             src={cardBackImg}
             alt="Card back"
-            className="w-full h-full object-cover rounded-md pointer-events-none"
+            className="w-full h-full object-contain bg-white rounded-md pointer-events-none"
           />
         </div>
 
@@ -132,7 +132,7 @@ export default function TarotCard({
             <img
               src={frontSrc}
               alt={card.name}
-              className="w-full h-full object-cover rounded-md pointer-events-none"
+              className="w-full h-full object-contain bg-white rounded-md pointer-events-none"
             />
           </div>
         )}
