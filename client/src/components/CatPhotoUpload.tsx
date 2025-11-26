@@ -44,8 +44,7 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md" data-testid="cat-photo-upload-dialog">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-serif text-center">고양이 사진을 업로드하세요!</DialogTitle>
+        <DialogHeader>          
           <DialogDescription className="sr-only">
             고양이 이름과 사진을 업로드하세요
           </DialogDescription>
