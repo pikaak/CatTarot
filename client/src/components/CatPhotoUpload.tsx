@@ -52,7 +52,7 @@ export default function CatPhotoUpload({ isOpen, onClose, onUpload, currentImage
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="cat-name-input" className="text-sm font-medium">
+            <label htmlFor="cat-name-input" className="text-base font-medium text-center block">
               고양이 이름
             </label>
             <Input
