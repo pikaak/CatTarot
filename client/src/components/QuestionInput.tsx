@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import GoogleAdBanner from "@/components/GoogleAdBanner";
 
 interface QuestionInputProps {
   value: string;
@@ -9,7 +10,12 @@ interface QuestionInputProps {
   disabled?: boolean;
 }
 
-export default function QuestionInput({ value, onChange, onSubmit, disabled = false }: QuestionInputProps) {
+export default function QuestionInput({
+  value,
+  onChange,
+  onSubmit,
+  disabled = false,
+}: QuestionInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -22,9 +28,14 @@ export default function QuestionInput({ value, onChange, onSubmit, disabled = fa
 
   return (
     <div className="space-y-4">
-      <div className="h-24 border-t flex items-center justify-center text-muted-foreground text-sm">
-        광고 공간
+      {/* 광고 배너 영역 */}
+      <div className="h-24 border-t flex items-center justify-center">
+        <div className="w-full max-w-md mx-auto">
+          <GoogleAdBanner />
+        </div>
       </div>
+
+      {/* 질문 입력 영역 */}
       <div className="flex gap-2 items-center">
         <Input
           type="text"
