@@ -9,7 +9,6 @@ import ResultModal from "@/components/ResultModal";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-// ✅ 카드 뒷면 이미지 프리로드용 import
 import cardBackImg from "@assets/generated_images/Mystical_tarot_card_back_8388aaca.png";
 
 type GameState = "initial" | "shuffling" | "spread" | "selecting" | "reading";
@@ -42,7 +41,6 @@ export default function CatTarotPage() {
   const [viewport, setViewport] = useState({ width: 1920, height: 1080 });
   const { toast } = useToast();
 
-  // ✅ 뷰포트 계산
   useEffect(() => {
     if (typeof window !== "undefined") {
       const updateViewport = () => {
@@ -54,27 +52,18 @@ export default function CatTarotPage() {
     }
   }, []);
 
-  // ✅ 첫 진입 시 로컬스토리지에서 고양이 정보 읽기
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedPhoto = localStorage.getItem(CAT_PHOTO_KEY);
       const savedName = localStorage.getItem(CAT_NAME_KEY);
 
-      if (savedPhoto) {
-        setCatPhoto(savedPhoto);
-      }
-      if (savedName) {
-        setCatName(savedName);
-      }
+      if (savedPhoto) setCatPhoto(savedPhoto);
+      if (savedName) setCatName(savedName);
 
-      // 사진이나 이름 둘 중 하나라도 없으면 업로드 모달 열기
-      if (!savedPhoto || !savedName) {
-        setShowPhotoUpload(true);
-      }
+      if (!savedPhoto || !savedName) setShowPhotoUpload(true);
     }
   }, []);
 
-  // ✅ 스프레딩 전에 카드 뒷면 이미지 프리로드
   useEffect(() => {
     const img = new Image();
     img.src = cardBackImg;
@@ -150,16 +139,15 @@ export default function CatTarotPage() {
 
       if (newSelected.length === 3) {
         setGameState("reading");
-        generateReading(newSelected);
+        readingMutation.mutate({
+          question,
+          cards: newSelected.map((c) => ({
+            name: c.name,
+            keywords: c.keywords,
+          })),
+        });
       }
     }, 300);
-  };
-
-  const generateReading = (cards: TarotCardType[]) => {
-    readingMutation.mutate({
-      question,
-      cards: cards.map((c) => ({ name: c.name, keywords: c.keywords })),
-    });
   };
 
   const handleReset = () => {
@@ -170,6 +158,7 @@ export default function CatTarotPage() {
     setFlippedCardIds([]);
     setReading("");
     setShowModal(false);
+
     readingMutation.reset();
 
     if (typeof window !== "undefined") {
@@ -193,9 +182,7 @@ export default function CatTarotPage() {
     });
   };
 
-  const handlePhotoClick = () => {
-    setShowPhotoUpload(true);
-  };
+  const handlePhotoClick = () => setShowPhotoUpload(true);
 
   const getCardPosition = (index: number, total: number) => {
     if (gameState === "initial" || gameState === "shuffling") {
@@ -212,6 +199,7 @@ export default function CatTarotPage() {
     const headerHeight = 64;
     const inputHeight = 100;
     const padding = isMobile ? 10 : 40;
+
     const availableWidth = viewportWidth - padding * 2;
     const availableHeight = viewportHeight - headerHeight - inputHeight - 40;
 
@@ -236,156 +224,143 @@ export default function CatTarotPage() {
     const totalHeight = (rows - 1) * verticalSpacing + cardHeight;
 
     const centerOffsetX = Math.max(0, (availableWidth - totalWidth) / 2);
-    const offsetX = padding + centerOffsetX;
-    const offsetY = Math.max(0, (availableHeight - totalHeight) / 2);
 
-    const x = offsetX + col * horizontalSpacing;
-    const y = offsetY + row * verticalSpacing;
-    const rotation = (Math.random() - 0.5) * 10;
-
-    return { x, y, rotation };
+    return {
+      x: padding + centerOffsetX + col * horizontalSpacing,
+      y: Math.max(0, (availableHeight - totalHeight) / 2) + row * verticalSpacing,
+      rotation: (Math.random() - 0.5) * 10,
+    };
   };
 
+  const isMobile = viewport.width < 768;
+
   return (
-    // ✅ 모바일에서 브라우저 UI 제외한 실제 화면 높이 기준으로 맞추기
-    <div className="min-h-screen min-h-[100dvh] bg-background flex flex-col overflow-x-hidden">
-      {/* 상단 고정 헤더 */}
+    <div
+      className="bg-background flex flex-col overflow-x-hidden"
+      style={{ minHeight: "100dvh" }} // ★ 모바일 100vh 문제 해결
+    >
       <Header
         onHomeClick={() => {
           window.location.href = "https://curioft.com";
         }}
       />
 
-      {/* 헤더 높이만큼 위에 여유 주고, 가운데 영역 + 인풋을 세로로 정렬 */}
-      {/* ✅ 모바일에서는 패딩을 조금 줄이고, 데스크탑은 기존 그대로 유지 */}
-      <div className="flex-1 flex flex-col pt-12 md:pt-16">
-        {/* 가운데 영역: 고양이 / 카드 스프레드 */}
-        <div className="flex-1 relative">
-          {gameState === "initial" && (
-            <div
-              className="absolute transition-all duration-1000 ease-out px-4"
-              style={{
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <TalkingCat
-                customImage={catPhoto}
-                catName={catName}
-                onPhotoClick={handlePhotoClick}
-                onNameEdit={handlePhotoClick}
-                greetingKey={greetingKey}
-              />
+      <div className="flex-1 relative">
+        {gameState === "initial" && (
+          <div
+            className="absolute transition-all duration-1000 ease-out px-4"
+            style={{
+              top: isMobile ? "calc(50% + 40px)" : "50%", // ★ 모바일에서 아래로 40px 보정
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <TalkingCat
+              customImage={catPhoto}
+              catName={catName}
+              onPhotoClick={handlePhotoClick}
+              onNameEdit={handlePhotoClick}
+              greetingKey={greetingKey}
+            />
+          </div>
+        )}
+
+        {(gameState === "shuffling" ||
+          gameState === "spread" ||
+          gameState === "selecting" ||
+          gameState === "reading") && (
+          <div
+            className="absolute inset-0 pt-4"
+            data-testid="card-spread-container"
+          >
+            <div className="relative w-full h-full">
+              {shuffledCards.map((card, index) => {
+                const pos = getCardPosition(index, shuffledCards.length);
+                const isSelected = selectedCards.find((c) => c.id === card.id);
+                const isFlipped = flippedCardIds.includes(card.id);
+                const selectedIndex = selectedCards.findIndex(
+                  (c) => c.id === card.id
+                );
+
+                const isMobile = viewport.width < 768;
+                const isTablet =
+                  viewport.width >= 768 && viewport.width < 1024;
+
+                let scale = 1;
+                if (isSelected) {
+                  if (isMobile) scale = 1.3;
+                  else if (isTablet) scale = 1.6;
+                  else scale = 2.0;
+                }
+
+                return (
+                  <div
+                    key={card.id}
+                    className="transition-all duration-700 ease-out absolute"
+                    style={{
+                      left: `${pos.x}px`,
+                      top: `${pos.y}px`,
+                      transform: `rotate(${
+                        isSelected ? 0 : pos.rotation
+                      }deg) scale(${scale})`,
+                      zIndex: isSelected ? 100 : 1,
+                    }}
+                    data-testid={`spread-card-${index}`}
+                  >
+                    <TarotCard
+                      card={card}
+                      isFlipped={isFlipped}
+                      onClick={() => handleCardClick(card)}
+                    />
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
+        )}
 
-          {(gameState === "shuffling" ||
-            gameState === "spread" ||
-            gameState === "selecting" ||
-            gameState === "reading") && (
-            <div
-              className="absolute inset-0 pt-4"
-              data-testid="card-spread-container"
-            >
-              <div className="relative w-full h-full">
-                {shuffledCards.map((card, index) => {
-                  const pos = getCardPosition(index, shuffledCards.length);
-                  const isSelected = selectedCards.find(
-                    (c) => c.id === card.id
-                  );
-                  const isFlipped = flippedCardIds.includes(card.id);
+        {gameState === "selecting" && (
+          <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+            <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
+              {selectedCards.length === 0 && "카드 3장을 선택하세요"}
+              {selectedCards.length === 1 && "카드 2장을 더 선택하세요"}
+              {selectedCards.length === 2 && "카드 1장을 더 선택하세요"}
+            </div>
+          </div>
+        )}
 
-                  const selectedIndex = selectedCards.findIndex(
-                    (c) => c.id === card.id
-                  );
-                  void selectedIndex; // 사용 안 하지만 타입 경고 방지용
-
-                  const isMobile = viewport.width < 768;
-                  const isTablet =
-                    viewport.width >= 768 && viewport.width < 1024;
-
-                  let scale = 1;
-                  if (isSelected) {
-                    if (isMobile) {
-                      scale = 1.3;
-                    } else if (isTablet) {
-                      scale = 1.6;
-                    } else {
-                      scale = 2.0;
-                    }
-                  }
-
-                  return (
-                    <div
-                      key={card.id}
-                      className="transition-all duration-700 ease-out absolute"
-                      style={{
-                        left: `${pos.x}px`,
-                        top: `${pos.y}px`,
-                        transform: `rotate(${
-                          isSelected ? 0 : pos.rotation
-                        }deg) scale(${scale})`,
-                        zIndex: isSelected ? 100 : 1,
-                      }}
-                      data-testid={`spread-card-${index}`}
-                    >
-                      <TarotCard
-                        card={card}
-                        isFlipped={isFlipped}
-                        onClick={() => handleCardClick(card)}
-                      />
-                    </div>
-                  );
-                })}
+        {readingMutation.isPending && (
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
+            <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
+              <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
+                고양이어 번역 중
+              </div>
+              <div className="flex justify-center gap-2">
+                <div
+                  className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <div
+                  className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
+      </div>
 
-          {gameState === "selecting" && (
-            <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
-              <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
-                {selectedCards.length === 0 && "카드 3장을 선택하세요"}
-                {selectedCards.length === 1 && "카드 2장을 더 선택하세요"}
-                {selectedCards.length === 2 && "카드 1장을 더 선택하세요"}
-              </div>
-            </div>
-          )}
-
-          {readingMutation.isPending && (
-            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
-              <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
-                <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
-                  고양이어 번역 중
-                </div>
-                <div className="flex justify-center gap-2">
-                  <div
-                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                    style={{ animationDelay: "0ms" }}
-                  ></div>
-                  <div
-                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                    style={{ animationDelay: "150ms" }}
-                  ></div>
-                  <div
-                    className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                    style={{ animationDelay: "300ms" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 항상 화면의 아랫부분 쪽에 위치하게 되는 질문 입력 영역 */}
-        <div className="p-4 pb-6">
-          <QuestionInput
-            value={question}
-            onChange={setQuestion}
-            onSubmit={handleCardStackClick}
-            disabled={gameState !== "initial"}
-          />
-        </div>
+      <div className="mt-auto p-4 pb-6">
+        <QuestionInput
+          value={question}
+          onChange={setQuestion}
+          onSubmit={handleCardStackClick}
+          disabled={gameState !== "initial"}
+        />
       </div>
 
       <ResultModal
