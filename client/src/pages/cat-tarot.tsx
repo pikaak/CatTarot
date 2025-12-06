@@ -265,7 +265,11 @@ export default function CatTarotPage() {
         }}
       />
 
+<<<<<<< HEAD
       <div className="pt-16 min-h-screen flex flex-col">
+=======
+      <div className="pt-16 flex-1 flex flex-col">
+>>>>>>> H
         <div className="flex-1 relative">
           {gameState === "initial" && (
             <div
@@ -384,7 +388,7 @@ export default function CatTarotPage() {
           )}
         </div>
 
-        <div className="p-4 pb-6">
+        <div className="mt-auto p-4 pb-6">
           <QuestionInput
             value={question}
             onChange={setQuestion}
