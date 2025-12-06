@@ -28,13 +28,14 @@ export default function QuestionInput({
 
   return (
     <div className="space-y-4">
-
-      {/* 광고 영역 (높이 강제 X, flex 사용 X) */}
-      <div className="w-full max-w-md mx-auto">
-        <GoogleAdBanner className="min-h-[100px]" />
+      {/* 광고 배너 영역 */}
+      <div className="h-24 border-t flex items-center justify-center">
+        <div className="w-full max-w-md mx-auto">
+          <GoogleAdBanner />
+        </div>
       </div>
 
-      {/* 입력 영역 */}
+      {/* 질문 입력 영역 */}
       <div className="flex gap-2 items-center">
         <Input
           type="text"
