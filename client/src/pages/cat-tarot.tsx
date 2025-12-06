@@ -257,7 +257,7 @@ export default function CatTarotPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-x-hidden">
       {/* ✅ 여기만 변경됨: 홈 버튼을 누르면 홈페이지로 이동 */}
       <Header
         onHomeClick={() => {
@@ -265,7 +265,7 @@ export default function CatTarotPage() {
         }}
       />
 
-      <div className="pt-16 h-screen flex flex-col">
+      <div className="pt-16 min-h-screen flex flex-col">
         <div className="flex-1 relative">
           {gameState === "initial" && (
             <div
