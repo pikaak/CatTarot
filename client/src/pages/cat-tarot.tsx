@@ -247,7 +247,8 @@ export default function CatTarotPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
+    // ✅ 모바일에서 브라우저 UI 제외한 실제 화면 높이 기준으로 맞추기
+    <div className="min-h-screen min-h-[100dvh] bg-background flex flex-col overflow-x-hidden">
       {/* 상단 고정 헤더 */}
       <Header
         onHomeClick={() => {
@@ -256,7 +257,8 @@ export default function CatTarotPage() {
       />
 
       {/* 헤더 높이만큼 위에 여유 주고, 가운데 영역 + 인풋을 세로로 정렬 */}
-      <div className="flex-1 flex flex-col pt-16">
+      {/* ✅ 모바일에서는 패딩을 조금 줄이고, 데스크탑은 기존 그대로 유지 */}
+      <div className="flex-1 flex flex-col pt-12 md:pt-16">
         {/* 가운데 영역: 고양이 / 카드 스프레드 */}
         <div className="flex-1 relative">
           {gameState === "initial" && (
