@@ -237,7 +237,7 @@ export default function CatTarotPage() {
   return (
     <div
       className="bg-background flex flex-col overflow-x-hidden"
-      style={{ minHeight: "100dvh" }} // ★ 모바일 100vh 문제 해결
+      style={{ minHeight: "100dvh" }}
     >
       <Header
         onHomeClick={() => {
@@ -245,14 +245,13 @@ export default function CatTarotPage() {
         }}
       />
 
-      <div className="flex-1 relative">
-        {gameState === "initial" && (
+      {/* TalkingCat을 absolute 대신 flow 기반 중앙 위 정렬로 변경 */}
+      {gameState === "initial" && (
+        <div className="flex flex-col items-center justify-center mt-8 mb-6 px-4">
           <div
-            className="absolute transition-all duration-1000 ease-out px-4"
+            className="w-full max-w-md transition-all duration-700 ease-out"
             style={{
-              top: isMobile ? "calc(50% + 40px)" : "50%", // ★ 모바일에서 아래로 40px 보정
-              left: "50%",
-              transform: "translate(-50%, -50%)",
+              transform: "translateY(-40px)", // 원본 스크린샷과 유사한 '약간 위' 위치
             }}
           >
             <TalkingCat
@@ -263,16 +262,16 @@ export default function CatTarotPage() {
               greetingKey={greetingKey}
             />
           </div>
-        )}
+        </div>
+      )}
 
+      {/* 카드 영역 */}
+      <div className="flex-1 relative">
         {(gameState === "shuffling" ||
           gameState === "spread" ||
           gameState === "selecting" ||
           gameState === "reading") && (
-          <div
-            className="absolute inset-0 pt-4"
-            data-testid="card-spread-container"
-          >
+          <div className="absolute inset-0 pt-4">
             <div className="relative w-full h-full">
               {shuffledCards.map((card, index) => {
                 const pos = getCardPosition(index, shuffledCards.length);
@@ -305,7 +304,6 @@ export default function CatTarotPage() {
                       }deg) scale(${scale})`,
                       zIndex: isSelected ? 100 : 1,
                     }}
-                    data-testid={`spread-card-${index}`}
                   >
                     <TarotCard
                       card={card}
@@ -354,6 +352,7 @@ export default function CatTarotPage() {
         )}
       </div>
 
+      {/* 광고 + 질문 입력창 (원본 구조 유지) */}
       <div className="mt-auto p-4 pb-6">
         <QuestionInput
           value={question}
