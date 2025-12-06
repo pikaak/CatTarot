@@ -244,7 +244,7 @@ export default function CatTarotPage() {
         }}
       />
 
-      {/* 초기 화면: 헤더 → 고양이 → 질문 입력 (단순 스택, 스크롤 거의 없음) */}
+      {/* INITIAL 화면 */}
       {gameState === "initial" ? (
         <>
           <div
@@ -269,12 +269,11 @@ export default function CatTarotPage() {
               onChange={setQuestion}
               onSubmit={handleCardStackClick}
               disabled={true}
-            </QuestionInput>
+            /> {/* FIXED */}
           </div>
         </>
       ) : (
         <>
-          {/* 카드 스프레드 / 셔플 / 리딩 화면 */}
           <div
             className="flex-1 relative pt-4"
             data-testid="card-spread-container"
@@ -282,7 +281,8 @@ export default function CatTarotPage() {
             <div className="relative w-full h-full">
               {shuffledCards.map((card, index) => {
                 const pos = getCardPosition(index, shuffledCards.length);
-                const isSelected = selectedCards.find((c) => c.id === card.id);
+                const isSelected =
+                  selectedCards.find((c) => c.id === card.id) != null;
                 const isFlipped = flippedCardIds.includes(card.id);
 
                 const isTablet =
@@ -354,14 +354,13 @@ export default function CatTarotPage() {
             )}
           </div>
 
-          {/* 다른 상태에서는 질문 입력은 비활성화만 */}
           <div className="px-4 pb-6">
             <QuestionInput
               value={question}
               onChange={setQuestion}
               onSubmit={handleCardStackClick}
               disabled={true}
-            />
+            /> {/* FIXED */}
           </div>
         </>
       )}
