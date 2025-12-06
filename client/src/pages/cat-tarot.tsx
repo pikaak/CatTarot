@@ -258,7 +258,12 @@ export default function CatTarotPage() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <Header onHomeClick={handleReset} />
+      {/* ✅ 여기만 변경됨: 홈 버튼을 누르면 홈페이지로 이동 */}
+      <Header
+        onHomeClick={() => {
+          window.location.href = "https://curioft.com"; // ← 원하는 홈페이지 주소로 바꾸기
+        }}
+      />
 
       <div className="pt-16 h-screen flex flex-col">
         <div className="flex-1 relative">
