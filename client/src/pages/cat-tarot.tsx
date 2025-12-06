@@ -237,36 +237,41 @@ export default function CatTarotPage() {
   const isMobile = viewport.width < 768;
 
   return (
-    <div
-      className="bg-background flex flex-col overflow-x-hidden"
-      style={{ minHeight: "100dvh" }}
-    >
+    <div className="bg-background flex flex-col overflow-x-hidden" style={{ minHeight: "100dvh" }}>
       <Header
         onHomeClick={() => {
           window.location.href = "https://curioft.com";
         }}
       />
 
-      {/* 가운데 영역 + 질문 입력 영역을 하나의 flex-1 안에서 처리 */}
-      <div className="flex-1 flex flex-col">
-        {/* 가운데 영역: 초기에는 고양이, 이후에는 카드 스프레드 */}
-        {gameState === "initial" ? (
-          <div className="flex-1 flex items-center justify-center px-4 pt-4 pb-2">
-            <div className="w-full max-w-md">
-              <TalkingCat
-                customImage={catPhoto}
-                catName={catName}
-                onPhotoClick={handlePhotoClick}
-                onNameEdit={handlePhotoClick}
-                greetingKey={greetingKey}
-              />
-            </div>
+      {/* 상태별로 레이아웃 높이 처리 다르게 적용 */}
+      {gameState === "initial" ? (
+        /* ─────────── 초기 화면: 자동 높이 / 중앙 정렬 ─────────── */
+        <div className="flex flex-col items-center px-4 pt-6">
+          <div className="w-full max-w-md flex justify-center">
+            <TalkingCat
+              customImage={catPhoto}
+              catName={catName}
+              onPhotoClick={handlePhotoClick}
+              onNameEdit={handlePhotoClick}
+              greetingKey={greetingKey}
+            />
           </div>
-        ) : (
-          <div
-            className="flex-1 relative pt-4"
-            data-testid="card-spread-container"
-          >
+
+          {/* 질문 입력 박스는 아래 고정 */}
+          <div className="w-full mt-8 pb-8">
+            <QuestionInput
+              value={question}
+              onChange={setQuestion}
+              onSubmit={handleCardStackClick}
+              disabled={false}
+            />
+          </div>
+        </div>
+      ) : (
+        /* ─────────── 초기 이후 화면: 카드 스프레드가 필요하므로 flex-1 적용 ─────────── */
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 relative pt-4" data-testid="card-spread-container">
             <div className="relative w-full h-full">
               {shuffledCards.map((card, index) => {
                 const pos = getCardPosition(index, shuffledCards.length);
@@ -341,18 +346,18 @@ export default function CatTarotPage() {
               </div>
             )}
           </div>
-        )}
 
-        {/* 질문 입력 박스: 항상 맨 아래에 하나만 */}
-        <div className="px-4 pb-6">
-          <QuestionInput
-            value={question}
-            onChange={setQuestion}
-            onSubmit={handleCardStackClick}
-            disabled={gameState !== "initial"}
-          />
+          {/* 질문 입력 박스 */}
+          <div className="px-4 pb-6">
+            <QuestionInput
+              value={question}
+              onChange={setQuestion}
+              onSubmit={handleCardStackClick}
+              disabled={true}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <ResultModal
         isOpen={showModal}
