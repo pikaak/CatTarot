@@ -196,12 +196,15 @@ export default function CatTarotPage() {
     const cardWidth = isMobile ? 50 : 60;
     const cardHeight = isMobile ? 75 : 90;
 
-    // 헤더/풋터 높이를 대충 빼주던 기존 방식은 모바일에서 오차가 심하므로
-    // 여기서는 padding 정도만 고려해서 "안 잘리게"만 배치하도록 단순화
-    const padding = isMobile ? 16 : 40;
+    // 🔹 헤더/질문 입력 영역 높이를 고려해서
+    //     그 사이의 공간 안에만 카드가 깔리도록 계산
+    const headerHeight = 64;
+    const inputHeight = 100;
+    const padding = isMobile ? 10 : 40;
 
     const availableWidth = viewportWidth - padding * 2;
-    const availableHeight = viewportHeight - padding * 2;
+    const availableHeight =
+      viewportHeight - headerHeight - inputHeight - padding * 2;
 
     const cols = Math.ceil(
       Math.sqrt(total * (availableWidth / availableHeight))
@@ -228,7 +231,7 @@ export default function CatTarotPage() {
 
     return {
       x: padding + centerOffsetX + col * horizontalSpacing,
-      y: padding + centerOffsetY + row * verticalSpacing,
+      y: headerHeight + centerOffsetY + row * verticalSpacing,
       rotation: (Math.random() - 0.5) * 10,
     };
   };
@@ -247,12 +250,12 @@ export default function CatTarotPage() {
       />
 
       {/* 메인 영역: 초기에는 TalkingCat, 이후에는 카드 스프레드 */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 relative flex flex-col">
         {gameState === "initial" && (
           <div
-            className={`w-full px-4 ${
-              isMobile ? "pt-8 pb-6" : "pt-12 pb-8"
-            } flex justify-center`}
+            className={`flex-1 flex items-center justify-center px-4 ${
+              isMobile ? "pt-4 pb-4" : "pt-8 pb-6"
+            }`}
           >
             <div className="w-full max-w-md">
               <TalkingCat
@@ -271,7 +274,7 @@ export default function CatTarotPage() {
           gameState === "selecting" ||
           gameState === "reading") && (
           <div
-            className="relative flex-1 pt-4"
+            className="absolute inset-0"
             data-testid="card-spread-container"
           >
             <div className="relative w-full h-full">
@@ -351,7 +354,7 @@ export default function CatTarotPage() {
         )}
       </div>
 
-      {/* 광고 + 질문 입력 영역 (그대로 유지) */}
+      {/* 광고 + 질문 입력 영역 (그대로) */}
       <div className="mt-auto p-4 pb-6">
         <QuestionInput
           value={question}
