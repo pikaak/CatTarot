@@ -249,10 +249,10 @@ export default function CatTarotPage() {
       />
 
       <main className="flex-1 flex flex-col">
-        {/* 초기 화면: 고양이 + 질문 입력 (광고 없음) */}
         {gameState === "initial" ? (
           <>
-            <div className="flex flex-col items-center px-4 pt-6">
+            {/* 고양이 영역: 남은 공간을 꽉 채우고 정중앙 정렬 */}
+            <div className="flex-1 flex items-center justify-center px-4 pt-4">
               <div className="w-full max-w-md flex justify-center">
                 <TalkingCat
                   customImage={catPhoto}
@@ -264,7 +264,8 @@ export default function CatTarotPage() {
               </div>
             </div>
 
-            <div className="mt-auto px-4 pb-6">
+            {/* 질문 입력: 항상 화면 하단 */}
+            <div className="px-4 pb-6">
               <QuestionInput
                 value={question}
                 onChange={setQuestion}
