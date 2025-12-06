@@ -6,6 +6,7 @@ import CatPhotoUpload from "@/components/CatPhotoUpload";
 import TarotCard from "@/components/TarotCard";
 import QuestionInput from "@/components/QuestionInput";
 import ResultModal from "@/components/ResultModal";
+import GoogleAdBanner from "@/components/GoogleAdBanner";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -237,127 +238,143 @@ export default function CatTarotPage() {
   const isMobile = viewport.width < 768;
 
   return (
-    <div className="bg-background flex flex-col overflow-x-hidden" style={{ minHeight: "100dvh" }}>
+    <div
+      className="bg-background flex flex-col overflow-x-hidden"
+      style={{ minHeight: "100dvh" }}
+    >
       <Header
         onHomeClick={() => {
           window.location.href = "https://curioft.com";
         }}
       />
 
-      {/* 상태별로 레이아웃 높이 처리 다르게 적용 */}
-      {gameState === "initial" ? (
-        /* ─────────── 초기 화면: 자동 높이 / 중앙 정렬 ─────────── */
-        <div className="flex flex-col items-center px-4 pt-6">
-          <div className="w-full max-w-md flex justify-center">
-            <TalkingCat
-              customImage={catPhoto}
-              catName={catName}
-              onPhotoClick={handlePhotoClick}
-              onNameEdit={handlePhotoClick}
-              greetingKey={greetingKey}
-            />
-          </div>
-
-          {/* 질문 입력 박스는 아래 고정 */}
-          <div className="w-full mt-8 pb-8">
-            <QuestionInput
-              value={question}
-              onChange={setQuestion}
-              onSubmit={handleCardStackClick}
-              disabled={false}
-            />
-          </div>
-        </div>
-      ) : (
-        /* ─────────── 초기 이후 화면: 카드 스프레드가 필요하므로 flex-1 적용 ─────────── */
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1 relative pt-4" data-testid="card-spread-container">
-            <div className="relative w-full h-full">
-              {shuffledCards.map((card, index) => {
-                const pos = getCardPosition(index, shuffledCards.length);
-                const isSelected = selectedCards.find((c) => c.id === card.id);
-                const isFlipped = flippedCardIds.includes(card.id);
-
-                const isTablet =
-                  viewport.width >= 768 && viewport.width < 1024;
-
-                let scale = 1;
-                if (isSelected) {
-                  if (isMobile) scale = 1.3;
-                  else if (isTablet) scale = 1.6;
-                  else scale = 2.0;
-                }
-
-                return (
-                  <div
-                    key={card.id}
-                    className="transition-all duration-700 ease-out absolute"
-                    style={{
-                      left: `${pos.x}px`,
-                      top: `${pos.y}px`,
-                      transform: `rotate(${
-                        isSelected ? 0 : pos.rotation
-                      }deg) scale(${scale})`,
-                      zIndex: isSelected ? 100 : 1,
-                    }}
-                    data-testid={`spread-card-${index}`}
-                  >
-                    <TarotCard
-                      card={card}
-                      isFlipped={isFlipped}
-                      onClick={() => handleCardClick(card)}
-                    />
-                  </div>
-                );
-              })}
+      <main className="flex-1 flex flex-col">
+        {/* 초기 화면: 고양이 + 질문 입력 (광고 없음) */}
+        {gameState === "initial" ? (
+          <>
+            <div className="flex flex-col items-center px-4 pt-6">
+              <div className="w-full max-w-md flex justify-center">
+                <TalkingCat
+                  customImage={catPhoto}
+                  catName={catName}
+                  onPhotoClick={handlePhotoClick}
+                  onNameEdit={handlePhotoClick}
+                  greetingKey={greetingKey}
+                />
+              </div>
             </div>
 
-            {gameState === "selecting" && (
-              <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
-                <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
-                  {selectedCards.length === 0 && "카드 3장을 선택하세요"}
-                  {selectedCards.length === 1 && "카드 2장을 더 선택하세요"}
-                  {selectedCards.length === 2 && "카드 1장을 더 선택하세요"}
+            <div className="mt-auto px-4 pb-6">
+              <QuestionInput
+                value={question}
+                onChange={setQuestion}
+                onSubmit={handleCardStackClick}
+                disabled={false}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            {/* 카드 스프레드 / 셔플 / 리딩 화면 */}
+            <div
+              className="flex-1 relative pt-4"
+              data-testid="card-spread-container"
+            >
+              <div className="relative w-full h-full">
+                {shuffledCards.map((card, index) => {
+                  const pos = getCardPosition(index, shuffledCards.length);
+                  const isSelected = selectedCards.find(
+                    (c) => c.id === card.id
+                  );
+                  const isFlipped = flippedCardIds.includes(card.id);
+
+                  const isTablet =
+                    viewport.width >= 768 && viewport.width < 1024;
+
+                  let scale = 1;
+                  if (isSelected) {
+                    if (isMobile) scale = 1.3;
+                    else if (isTablet) scale = 1.6;
+                    else scale = 2.0;
+                  }
+
+                  return (
+                    <div
+                      key={card.id}
+                      className="transition-all duration-700 ease-out absolute"
+                      style={{
+                        left: `${pos.x}px`,
+                        top: `${pos.y}px`,
+                        transform: `rotate(${
+                          isSelected ? 0 : pos.rotation
+                        }deg) scale(${scale})`,
+                        zIndex: isSelected ? 100 : 1,
+                      }}
+                      data-testid={`spread-card-${index}`}
+                    >
+                      <TarotCard
+                        card={card}
+                        isFlipped={isFlipped}
+                        onClick={() => handleCardClick(card)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+              {gameState === "selecting" && (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+                  <div className="text-2xl font-serif text-foreground bg-primary/90 text-primary-foreground backdrop-blur-sm px-8 py-4 rounded-xl shadow-2xl border-2 border-primary animate-pulse">
+                    {selectedCards.length === 0 && "카드 3장을 선택하세요"}
+                    {selectedCards.length === 1 && "카드 2장을 더 선택하세요"}
+                    {selectedCards.length === 2 && "카드 1장을 더 선택하세요"}
+                  </div>
+                </div>
+              )}
+
+              {readingMutation.isPending && (
+                <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
+                  <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
+                    <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
+                      고양이어 번역 중
+                    </div>
+                    <div className="flex justify-center gap-2">
+                      <div
+                        className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      />
+                      <div
+                        className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "150ms" }}
+                      />
+                      <div
+                        className="w-3 h-3 bg-primary rounded-full animate-bounce"
+                        style={{ animationDelay: "300ms" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 광고 + 질문 입력 (카드 화면에서만) */}
+            <div className="mt-auto px-4 pb-6 space-y-3">
+              <div className="border-t pt-3">
+                <div className="w-full max-w-md mx-auto">
+                  <GoogleAdBanner />
                 </div>
               </div>
-            )}
 
-            {readingMutation.isPending && (
-              <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[150]">
-                <div className="bg-card border-2 border-primary/50 rounded-2xl p-8 shadow-2xl max-w-md">
-                  <div className="text-2xl font-serif text-foreground text-center mb-4 animate-pulse">
-                    고양이어 번역 중
-                  </div>
-                  <div className="flex justify-center gap-2">
-                    <div
-                      className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                      style={{ animationDelay: "0ms" }}
-                    />
-                    <div
-                      className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                      style={{ animationDelay: "150ms" }}
-                    />
-                    <div
-                      className="w-3 h-3 bg-primary rounded-full animate-bounce"
-                      style={{ animationDelay: "300ms" }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 질문 입력 박스 */}
-          <div className="px-4 pb-6">
-            <QuestionInput
-              value={question}
-              onChange={setQuestion}
-              onSubmit={handleCardStackClick}
-              disabled={true}
-            />
-          </div>
-        </div>
-      )}
+              <QuestionInput
+                value={question}
+                onChange={setQuestion}
+                onSubmit={handleCardStackClick}
+                disabled={true}
+              />
+            </div>
+          </>
+        )}
+      </main>
 
       <ResultModal
         isOpen={showModal}

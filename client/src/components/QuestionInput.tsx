@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import GoogleAdBanner from "@/components/GoogleAdBanner";
 
 interface QuestionInputProps {
   value: string;
@@ -10,6 +9,11 @@ interface QuestionInputProps {
   disabled?: boolean;
 }
 
+/**
+ * 질문 입력 전용 컴포넌트
+ * - 광고 영역은 전혀 포함하지 않음
+ * - 레이아웃(위치/여백/광고)은 상위에서 결정
+ */
 export default function QuestionInput({
   value,
   onChange,
@@ -27,35 +31,25 @@ export default function QuestionInput({
   };
 
   return (
-    <div className="space-y-4">
-      {/* 광고 배너 영역 */}
-      <div className="h-24 border-t flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto">
-          <GoogleAdBanner />
-        </div>
-      </div>
-
-      {/* 질문 입력 영역 */}
-      <div className="flex gap-2 items-center">
-        <Input
-          type="text"
-          placeholder="질문을 입력하세요..."
-          value={value}
-          onChange={handleChange}
-          disabled={disabled}
-          className="flex-1 h-12 rounded-full px-6"
-          data-testid="input-question"
-        />
-        <Button
-          size="icon"
-          onClick={handleSubmit}
-          disabled={disabled || !value || !value.trim()}
-          className="h-12 w-12 rounded-full"
-          data-testid="button-submit"
-        >
-          <ArrowRight className="h-5 w-5" />
-        </Button>
-      </div>
+    <div className="flex gap-2 items-center">
+      <Input
+        type="text"
+        placeholder="질문을 입력하세요..."
+        value={value}
+        onChange={handleChange}
+        disabled={disabled}
+        className="flex-1 h-12 rounded-full px-6"
+        data-testid="input-question"
+      />
+      <Button
+        size="icon"
+        onClick={handleSubmit}
+        disabled={disabled || !value || !value.trim()}
+        className="h-12 w-12 rounded-full"
+        data-testid="button-submit"
+      >
+        <ArrowRight className="h-5 w-5" />
+      </Button>
     </div>
   );
 }
