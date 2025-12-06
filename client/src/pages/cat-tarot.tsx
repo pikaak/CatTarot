@@ -237,21 +237,21 @@ export default function CatTarotPage() {
   const isMobile = viewport.width < 768;
 
   return (
-    <div className="bg-background flex flex-col overflow-x-hidden">
+    <div
+      className="bg-background flex flex-col overflow-x-hidden"
+      style={{ minHeight: "100dvh" }}
+    >
       <Header
         onHomeClick={() => {
           window.location.href = "https://curioft.com";
         }}
       />
 
-      {/* INITIAL 화면 */}
-      {gameState === "initial" ? (
-        <>
-          <div
-            className={`w-full px-4 ${
-              isMobile ? "pt-10 pb-6" : "pt-16 pb-8"
-            } flex justify-center`}
-          >
+      {/* 가운데 영역 + 질문 입력 영역을 하나의 flex-1 안에서 처리 */}
+      <div className="flex-1 flex flex-col">
+        {/* 가운데 영역: 초기에는 고양이, 이후에는 카드 스프레드 */}
+        {gameState === "initial" ? (
+          <div className="flex-1 flex items-center justify-center px-4 pt-4 pb-2">
             <div className="w-full max-w-md">
               <TalkingCat
                 customImage={catPhoto}
@@ -262,18 +262,7 @@ export default function CatTarotPage() {
               />
             </div>
           </div>
-
-          <div className="px-4 pb-6">
-            <QuestionInput
-              value={question}
-              onChange={setQuestion}
-              onSubmit={handleCardStackClick}
-              disabled={true}
-            /> {/* FIXED */}
-          </div>
-        </>
-      ) : (
-        <>
+        ) : (
           <div
             className="flex-1 relative pt-4"
             data-testid="card-spread-container"
@@ -281,8 +270,7 @@ export default function CatTarotPage() {
             <div className="relative w-full h-full">
               {shuffledCards.map((card, index) => {
                 const pos = getCardPosition(index, shuffledCards.length);
-                const isSelected =
-                  selectedCards.find((c) => c.id === card.id) != null;
+                const isSelected = selectedCards.find((c) => c.id === card.id);
                 const isFlipped = flippedCardIds.includes(card.id);
 
                 const isTablet =
@@ -353,17 +341,18 @@ export default function CatTarotPage() {
               </div>
             )}
           </div>
+        )}
 
-          <div className="px-4 pb-6">
-            <QuestionInput
-              value={question}
-              onChange={setQuestion}
-              onSubmit={handleCardStackClick}
-              disabled={true}
-            /> {/* FIXED */}
-          </div>
-        </>
-      )}
+        {/* 질문 입력 박스: 항상 맨 아래에 하나만 */}
+        <div className="px-4 pb-6">
+          <QuestionInput
+            value={question}
+            onChange={setQuestion}
+            onSubmit={handleCardStackClick}
+            disabled={gameState !== "initial"}
+          />
+        </div>
+      </div>
 
       <ResultModal
         isOpen={showModal}
