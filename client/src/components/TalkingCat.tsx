@@ -106,7 +106,7 @@ export default function TalkingCat({
           <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[12px] border-r-primary/30" />
           <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 translate-x-[2px] w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-card" />
 
-          <p className="text-foreground text-sm">
+          <p className="text-foreground text-sm md:text-lg">
             {greetingText}
           </p>
         </div>
