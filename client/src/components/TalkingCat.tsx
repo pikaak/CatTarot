@@ -70,8 +70,7 @@ export default function TalkingCat({
           className="relative transition-all duration-500 cursor-pointer flex-shrink-0"
           style={{
             width: "140px",
-            height: "140px",
-            animation: isAnimating ? "scale 0.5s ease-in-out" : undefined,
+            height: "140px",            
           }}
           onClick={handlePhotoClick}
           data-testid="cat-image-area"
@@ -98,6 +97,9 @@ export default function TalkingCat({
         <div
           className="relative bg-card border-2 border-primary/30 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl w-[85%] mx-auto md:w-auto md:max-w-md"
           data-testid="speech-bubble"
+          style={{
+            animation: isAnimating ? "scale 0.5s ease-in-out" : undefined,
+          }}
         >
           <div className="absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[12px] border-b-primary/30 md:hidden" />
           <div className="absolute left-1/2 -translate-x-1/2 -top-1 -translate-y-full w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card md:hidden" />
